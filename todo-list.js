@@ -1,10 +1,13 @@
 
+import { format } from "date-fns";
 
-export function toDoList(title,discription,dueDate,dueTime){
+
+
+export function toDoList(title,discription,dueDate){
     let isTaskComplete = false;
     let isTaskImportant = false;
-    return Object.assign({},title,discription,dueDate,dueTime,isTaskComplete,isTaskImportant,
-        addListToProject,createProject)
+    return Object.assign({},title,discription,dueDate,isTaskComplete,isTaskImportant,
+        addListToProject,createProject,formatDate)
 }
 
 export const projectList = {'default':[]}
@@ -19,9 +22,6 @@ const addListToProject = (project,list)=>{
 
 
 function formatDate(date){
-    //formating date
+    return format(date, "yyyy-MM-dd");
 }
 
-function formatTime(time){
-    //formating Time
-}
