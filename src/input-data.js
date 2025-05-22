@@ -1,4 +1,6 @@
 import { compareAsc } from "date-fns";
+import { toDoList } from "./todo-list";
+import { projectList } from "./todo-list";
 
 
 export const createTaskForm=(()=>{
@@ -36,13 +38,27 @@ export const createTaskForm=(()=>{
     const createSubmitButton=()=>{
         const button = document.createElement('button');
         button.addEventListener('click',(event)=>{
-            tagArray.forEach((tag)=>{
-                tag.formValidate()
-            })
+            const dataArray = tagArray.map((tag)=>(tag.formValidate()))
+
+            if (false in dataArray){
+                console.log('pass')
+                extractDataFromTheFormAndCreatObject()
+            }
+
             event.preventDefault();
         });
         button.textContent = 'submit'
         return button
+    }
+
+    const extractDataFromTheFormAndCreatObject =()=>{
+        let [title,discription,dueDate,project] = tagArray.map((tag)=>(tag.getValue()))
+        console.log(title,discription,dueDate,'sstyttytyt')
+        const taskList = toDoList(title,discription,dueDate);
+        console.log(taskList)
+        taskList.createProject(project)
+        taskList.addListToProject(project,taskList);
+        console.log(projectList,'data')
     }
 
 
@@ -55,41 +71,46 @@ function createInputTag(tagName,label,classes=[]){
     inputTag.id = label
     inputTag.classList.add(classes)
 
-    return {inputTag,label}
+    const getValue = ()=>(inputTag.value)
+
+    return {inputTag,label,getValue}
 }
 
 function createTextAreaTag(title,classes=[],isMandatory = false){
-    const {inputTag,label} = createInputTag('textarea',title,classes)
+    const {inputTag,label,getValue} = createInputTag('textarea',title,classes)
 
-    const formValidate = ()=>{console.log(inputTag.value)}
+    const formValidate = ()=>(true)
 
-    return {inputTag,label,formValidate}
+    return {inputTag,label,getValue,formValidate}
     
     }
 
 
 
 function createInputTextTag(title,classes=[],isMandatory = false){
-    const {inputTag,label} = createInputTag('input',title,classes)
+    const {inputTag,label,getValue} = createInputTag('input',title,classes)
     inputTag.type = 'text';
 
     const formValidate = ()=>{
         if (isMandatory && inputTag.value==''){
             alert('title cannot be empty')
+            return false
         }
+        return true
     }
 
-    return {inputTag,label,formValidate}
+    return {inputTag,label,getValue,formValidate}
 }
 
 
 function createInputDateTag(title,classes=[],isMandatory = false){
-    const {inputTag,label} = createInputTag('input',title,classes)
+    const {inputTag,label,getValue} = createInputTag('input',title,classes)
     inputTag.type = 'date';
 
     const formValidate = ()=>{
         if(isMandatory && !inputTag.value){
             alert('enter a date')
+            return false
         }
         const today = todayDate()
         const [year,month,date] = inputTag.value.split("-")
@@ -97,7 +118,9 @@ function createInputDateTag(title,classes=[],isMandatory = false){
 
         if (compareAsc(today,inputDate)===1){
             alert('Date already finished')
+            return false
         }
+        return true
     }
 
     const todayDate = ()=>{
@@ -105,13 +128,10 @@ function createInputDateTag(title,classes=[],isMandatory = false){
         return new Date(today.getFullYear(),today.getMonth()+1,today.getDate())
     }
     
-    return {inputTag,label,formValidate}
+    return {inputTag,label,getValue,formValidate}
 }
 
 
 
 
 
-const extractDataFromTheFormAndCreatObject =()=>{
-    //data exctraction
-}

@@ -6,22 +6,27 @@ import { format } from "date-fns";
 export function toDoList(title,discription,dueDate){
     let isTaskComplete = false;
     let isTaskImportant = false;
-    return Object.assign({},title,discription,dueDate,isTaskComplete,isTaskImportant,
-        addListToProject,createProject,formatDate)
+    const formatDate = ()=>(format(date, "yyyy-MM-dd"))
+    return Object.assign({title,discription,dueDate,isTaskComplete,isTaskImportant,formatDate},
+        creator(),adder())
 }
 
 export const projectList = {'default':[]}
 
-const createProject =(projectName)=>{
-    projectList.projectName = []
+const creator = ()=>{
+    const createProject = (projectName)=>{
+        if(!(projectName in projectList)){
+            projectList[projectName] = []
+        }
+    }
+
+    return {createProject}
 }
 
-const addListToProject = (project,list)=>{
-    projectList.project.push(list);
-}
-
-
-function formatDate(date){
-    return format(date, "yyyy-MM-dd");
+const adder = ()=>{
+    const addListToProject = (project,list)=>{
+        projectList[project].push(list);
+    }
+    return {addListToProject}
 }
 
