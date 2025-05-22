@@ -3,23 +3,22 @@ import { toDoList } from "./todo-list";
 import { projectList } from "./todo-list";
 
 
-export const createTaskForm=(()=>{
+export const createTaskForm=(parentTag)=>{
     const tagArray = [
         createInputTextTag('title',['input-task','title','text'],true),
         createTextAreaTag('discription',['input-task','discription','text']),
         createInputDateTag('duedate',['input-task','due-date','date'],true),
         createInputTextTag('project',['input-task','project','text']),
     ]
+    const form = document.createElement('form');
     const createForm = ()=>{
-        const formDiv = document.createElement('form');
-        formDiv.classList.add('task-form')
+        form.classList.add('task-form')
         tagArray.forEach((tag)=>{
-            formDiv.appendChild(containInputTagIntoDivWithALabel(tag));
+            form.appendChild(containInputTagIntoDivWithALabel(tag));
         });
     
-        formDiv.appendChild(createSubmitButton())
-    
-        return formDiv
+        form.appendChild(createSubmitButton())
+        parentTag.appendChild(form)
     }
 
     const containInputTagIntoDivWithALabel = (tag)=>{
@@ -40,9 +39,12 @@ export const createTaskForm=(()=>{
         button.addEventListener('click',(event)=>{
             const dataArray = tagArray.map((tag)=>(tag.formValidate()))
 
-            if (false in dataArray){
+            console.log(dataArray,'isit')
+
+            if (!(false in dataArray)){
                 console.log('pass')
                 extractDataFromTheFormAndCreatObject()
+                removeForm()
             }
 
             event.preventDefault();
@@ -62,9 +64,14 @@ export const createTaskForm=(()=>{
     }
 
 
+    const removeForm=()=>{
+        parentTag.removeChild(form)
+    }
+
+
     return {createForm}
     
-})()
+}
 
 function createInputTag(tagName,label,classes=[]){
     const inputTag = document.createElement(tagName);
