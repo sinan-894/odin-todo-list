@@ -1,8 +1,5 @@
-import { createForm } from "./input-data.js";
+import { createTaskForm } from "./input-data.js";
 
 console.log('hello world');
 
-
-
-
-document.body.appendChild(createForm());
+document.body.appendChild(createTaskForm.createForm());
