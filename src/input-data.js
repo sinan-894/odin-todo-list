@@ -1,3 +1,4 @@
+import { compareAsc } from "date-fns";
 
 
 export const createTaskForm=(()=>{
@@ -51,8 +52,7 @@ export const createTaskForm=(()=>{
 
 function createInputTag(tagName,label,classes=[]){
     const inputTag = document.createElement(tagName);
-    console.log('hi')
-    //inputTag.id = label
+    inputTag.id = label
     inputTag.classList.add(classes)
 
     return {inputTag,label}
@@ -74,8 +74,9 @@ function createInputTextTag(title,classes=[],isMandatory = false){
     inputTag.type = 'text';
 
     const formValidate = ()=>{
-        console.log(inputTag.value)
-        console.log(typeof(inputTag.value))
+        if (isMandatory && inputTag.value==''){
+            alert('title cannot be empty')
+        }
     }
 
     return {inputTag,label,formValidate}
@@ -87,8 +88,21 @@ function createInputDateTag(title,classes=[],isMandatory = false){
     inputTag.type = 'date';
 
     const formValidate = ()=>{
-        console.log(inputTag.value)
-        console.log(typeof(inputTag.value))
+        if(isMandatory && !inputTag.value){
+            alert('enter a date')
+        }
+        const today = todayDate()
+        const [year,month,date] = inputTag.value.split("-")
+        const inputDate = new Date(year,month,date);
+
+        if (compareAsc(today,inputDate)===1){
+            alert('Date already finished')
+        }
+    }
+
+    const todayDate = ()=>{
+        let today  = new Date()
+        return new Date(today.getFullYear(),today.getMonth()+1,today.getDate())
     }
     
     return {inputTag,label,formValidate}
