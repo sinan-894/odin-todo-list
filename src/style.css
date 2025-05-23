@@ -1,7 +1,10 @@
 body{
     --background-color-global: #0a0a0a;
+    --sidebar-color:oklch(26.9% 0 0);
+    --text-color:#f8f8f8;
     background-color: var(--background-color-global);
     margin: 0px;
+    color: var(--text-color);
     
 }
 
@@ -20,12 +23,12 @@ body{
 }
 
 .sidebar-div{
-    background-color:oklch(26.9% 0 0);
+    background-color:var(--sidebar-color);
     height: max(88vh,100%);
 }
 
 .heading-todo {
-    color: #f8f8f8;
+    color: var(--text-color);
 }
 .main-div > button{
     position: fixed;
@@ -33,10 +36,31 @@ body{
     bottom: 20px;
     background-color:var(--background-color-global) ;
     border: 0px;
-    
+    padding: 0px;
+
 }
 
 .main-div>button>img{
     height: 100px;
     width: 100px;
+}
+
+.project-button{
+    width: 100%;
+    background-color:var(--sidebar-color) ;
+    color: var(--text-color);
+    border: 0px;
+    font-size: 1em;
+    margin-top:10px ;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.project-button:hover{
+    background-color: aqua;
+}
+
+
+form >div> label{
+    color: var(--text-color);
 }

@@ -37,22 +37,31 @@ export const createTaskForm=(parentTag)=>{
     const createSubmitButton=()=>{
         const button = document.createElement('button');
         button.addEventListener('click',(event)=>{
-            const dataArray = tagArray.map((tag)=>(tag.formValidate()))
-
-            console.log(dataArray,'isit')
-
-            if (!(false in dataArray)){
-                console.log('pass')
-                extractDataFromTheFormAndCreatObject()
-                removeForm()
+            event.preventDefault();
+            if (isformValid){
+                
             }
 
-            event.preventDefault();
+            
         });
         button.textContent = 'submit'
         return button
     }
 
+    const isformValid = ()=>{
+        const dataArray = tagArray.map((tag)=>(tag.formValidate()))
+            if (!(false in dataArray)){
+                console.log('pass')
+                return true
+            }
+            return false
+    }
+
+    const goToTheProjectTaskPage = ()=>{
+        
+    }
+
+    
     const extractDataFromTheFormAndCreatObject =()=>{
         let [title,discription,dueDate,project] = tagArray.map((tag)=>(tag.getValue()))
         console.log(title,discription,dueDate,'sstyttytyt')
@@ -92,8 +101,6 @@ function createTextAreaTag(title,classes=[],isMandatory = false){
     
     }
 
-
-
 function createInputTextTag(title,classes=[],isMandatory = false){
     const {inputTag,label,getValue} = createInputTag('input',title,classes)
     inputTag.type = 'text';
@@ -108,7 +115,6 @@ function createInputTextTag(title,classes=[],isMandatory = false){
 
     return {inputTag,label,getValue,formValidate}
 }
-
 
 function createInputDateTag(title,classes=[],isMandatory = false){
     const {inputTag,label,getValue} = createInputTag('input',title,classes)
@@ -137,7 +143,6 @@ function createInputDateTag(title,classes=[],isMandatory = false){
     
     return {inputTag,label,getValue,formValidate}
 }
-
 
 
 
