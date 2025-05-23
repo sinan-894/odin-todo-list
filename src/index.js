@@ -3,11 +3,14 @@ import { compareAsc } from "date-fns";
 
 import { toDoList,projectList } from "./todo-list.js";
 
+import { mainInterface } from "./task-display.js";
 
 
-let k = document.body
+const createDisplay = mainInterface()
 
-let j = createTaskForm(k)
+document.body.appendChild(createDisplay.createInterface())
 
-j.createForm()
+
+
+
 
