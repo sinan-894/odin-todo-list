@@ -5,61 +5,111 @@ import { createTaskForm } from "./input-data";
 import { domHelper } from "./dom";
 
 
+
+
+
+
 export function mainInterface(){
     const dom = domHelper()
-    const header = ()=>{
-        const headerDiv = document.createElement('div');
-        headerDiv.classList.add('header-div')
-        const heading = document.createElement('h1')
-        heading.classList.add('heading-todo')
-        heading.textContent =  'TODO'
-        headerDiv.appendChild(heading)
-        return headerDiv
-    }
+    const header = dom.createTag('div','header-div') 
+    const sideBar =  dom.createTag('div','sidebar-div')
+    const mainContent = dom.createTag('div','main-div') 
+    const giveHeading = dom.createTag('h1','heading-todo',header,'TODO')
+    const form  = createTaskForm(mainContent)
+    
+    const formDisplayButton = createFormDisplayButton(mainContent);
+    formDisplayButton.addButton()
 
-    const sideBar = ()=>{
-        const sideBarDiv = document.createElement('div');
-        sideBarDiv.classList.add('sidebar-div');
-        sideBarDiv.appendChild(addProjectsNameToSideBar())
-        return sideBarDiv
-    }
+    const projectName = addProjectsName(mainContent)
+    projectName.addProjectsNameToSideBar(sideBar)
+    
+    
 
-    const mainContent = ()=>{
-        const mainDiv = document.createElement('div');
-        mainDiv.classList.add('main-div');
-        addButton(mainDiv)
-        return mainDiv
-    }
+    
 
-    const addButton = (parentTag)=>{
-        const button = document.createElement('button');
-        button.addEventListener('click',()=>{
-            const form=createTaskForm(parentTag);
-            form.createForm()
-            parentTag.removeChild(button)
+    return Object.assign({},divContainer(header,sideBar,mainContent))
+
+}
+
+
+
+const divContainer = (...tags)=>{
+
+    const createInterface = ()=>{
+        const containerDiv = document.createElement('div');
+        containerDiv.classList.add('container-div');
+        tags.forEach((tag)=>{
+            containerDiv.appendChild(tag)
         })
+
+        return containerDiv
+    }
+
+    return {createInterface}
+}
+
+function mainContentDynamic(parentTag){
+    const form  = createTaskForm(parentTag)
+    const dom = domHelper()
+
+    const cleanMainContentDiv = ()=>{
+        const childrenArray = Array.from(parentTag.children)
+        childrenArray.forEach((child)=>{
+            parentTag.removeChild(child);
+        })
+    }
+
+    return {dom,cleanMainContentDiv,form}
+}
+
+
+
+const createFormDisplayButton  = (parentTag)=>{
+    const {dom,cleanMainContentDiv,form} = mainContentDynamic(parentTag)
+    
+    const addButton = ()=>{
+        const button = dom.createTag('button','button-create-form',parentTag)
+        button.addEventListener('click',onFormCreateButtonPress)
+        addImageToButton(button)
+        
+    }
+
+    const onFormCreateButtonPress = ()=>{
+        cleanMainContentDiv()
+        form.createForm()
+    }
+
+    
+    const addImageToButton = (button)=>{
         const svgHandler = document.createElement('img');
         svgHandler.src = buttonSvg;
         button.appendChild(svgHandler)
-        parentTag.appendChild(button)
     }
 
-    const addProjectsNameToSideBar = ()=>{
+    return {addButton}
+}
+
+
+
+function addProjectsName(parentTag){
+    const {dom,cleanMainContentDiv,form} = mainContentDynamic(parentTag)
+    const formDisplayButton = createFormDisplayButton(parentTag);
+
+    const addProjectsNameToSideBar = (sideBar)=>{
         const projects = Object.keys(projectList);
         const projectsDisplayDiv = document.createElement("div");
         projects.forEach((project)=>{
-            let button  = document.createElement('button');
+            let button =dom.createTag('button','project-button',projectsDisplayDiv,project)
             button.addEventListener('click',()=>{onProjectButtonPress(project)})
-            button.classList.add("project-button")
-            button.textContent = project;
-            projectsDisplayDiv.appendChild(button)
         })
 
-        return projectsDisplayDiv
+        dom.makeParent(sideBar,projectsDisplayDiv)
     }
 
     const onProjectButtonPress = (project)=>{
+        cleanMainContentDiv()
         displayProject(project)
+        formDisplayButton.addButton()
     }
 
     const displayProject = (project)=>{
@@ -91,23 +141,5 @@ export function mainInterface(){
         
     }
 
-    return Object.assign({},divContainer(header(),sideBar(),mainContent()))
-
-}
-
-
-
-const divContainer = (...tags)=>{
-
-    const createInterface = ()=>{
-        const containerDiv = document.createElement('div');
-        containerDiv.classList.add('container-div');
-        tags.forEach((tag)=>{
-            containerDiv.appendChild(tag)
-        })
-
-        return containerDiv
-    }
-
-    return {createInterface}
+    return {addProjectsNameToSideBar}
 }
