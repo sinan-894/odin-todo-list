@@ -15,13 +15,12 @@ export function mainInterface(){
     const sideBar =  dom.createTag('div','sidebar-div')
     const mainContent = dom.createTag('div','main-div') 
     const giveHeading = dom.createTag('h1','heading-todo',header,'TODO')
-    const form  = createTaskForm(mainContent)
     
     const formDisplayButton = createFormDisplayButton(mainContent);
     formDisplayButton.addButton()
 
-    const projectName = addProjectsName(mainContent)
-    projectName.addProjectsNameToSideBar(sideBar)
+    const project = displayProject(mainContent)
+    project.addProjectsNameToSideBar(sideBar)
     
     
 
@@ -30,8 +29,6 @@ export function mainInterface(){
     return Object.assign({},divContainer(header,sideBar,mainContent))
 
 }
-
-
 
 const divContainer = (...tags)=>{
 
@@ -49,7 +46,6 @@ const divContainer = (...tags)=>{
 }
 
 function mainContentDynamic(parentTag){
-    const form  = createTaskForm(parentTag)
     const dom = domHelper()
 
     const cleanMainContentDiv = ()=>{
@@ -59,13 +55,12 @@ function mainContentDynamic(parentTag){
         })
     }
 
-    return {dom,cleanMainContentDiv,form}
+    return {dom,cleanMainContentDiv}
 }
 
-
-
-const createFormDisplayButton  = (parentTag)=>{
-    const {dom,cleanMainContentDiv,form} = mainContentDynamic(parentTag)
+export const createFormDisplayButton  = (parentTag)=>{
+    const {dom,cleanMainContentDiv} = mainContentDynamic(parentTag)
+    const form  = createTaskForm(parentTag)
     
     const addButton = ()=>{
         const button = dom.createTag('button','button-create-form',parentTag)
@@ -89,10 +84,8 @@ const createFormDisplayButton  = (parentTag)=>{
     return {addButton}
 }
 
-
-
-function addProjectsName(parentTag){
-    const {dom,cleanMainContentDiv,form} = mainContentDynamic(parentTag)
+export function displayProject(parentTag){
+    const {dom,cleanMainContentDiv} = mainContentDynamic(parentTag)
     const formDisplayButton = createFormDisplayButton(parentTag);
 
     const addProjectsNameToSideBar = (sideBar)=>{
@@ -108,11 +101,11 @@ function addProjectsName(parentTag){
 
     const onProjectButtonPress = (project)=>{
         cleanMainContentDiv()
-        displayProject(project)
+        displayProjectInParent(project)
         formDisplayButton.addButton()
     }
 
-    const displayProject = (project)=>{
+    const displayProjectInParent = (project)=>{
         const projectDiv  = dom.createTag('div','project-div');
         const projectHeading = dom.createTag('h2','project-heading',projectDiv,project);
         const taskList = getProjectTaksDataintoDiv(project);
@@ -141,5 +134,5 @@ function addProjectsName(parentTag){
         
     }
 
-    return {addProjectsNameToSideBar}
+    return {addProjectsNameToSideBar,displayProjectInParent}
 }

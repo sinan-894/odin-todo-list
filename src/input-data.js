@@ -1,86 +1,21 @@
 import { compareAsc } from "date-fns";
 import { toDoList } from "./todo-list";
 import { projectList } from "./todo-list";
+import { domHelper } from "./dom";
+import { displayProject,createFormDisplayButton } from "./task-display";
 
-
-export const createTaskForm=(parentTag)=>{
-    const tagArray = [
+const tags ={
+    inputs:[
         createInputTextTag('title',['input-task','title','text'],true),
         createTextAreaTag('discription',['input-task','discription','text']),
         createInputDateTag('duedate',['input-task','due-date','date'],true),
         createInputTextTag('project',['input-task','project','text']),
-    ]
-    const form = document.createElement('form');
-    const createForm = ()=>{
-        form.classList.add('task-form')
-        tagArray.forEach((tag)=>{
-            form.appendChild(containInputTagIntoDivWithALabel(tag));
-        });
-    
-        form.appendChild(createSubmitButton())
-        parentTag.appendChild(form)
-    }
+    ]   
 
-    const containInputTagIntoDivWithALabel = (tag)=>{
-        const containerDiv = document.createElement('div');
-        containerDiv.classList.add(tag.label+'-div');
-        const labelTag = document.createElement('label');
-        labelTag.for = tag.label;
-        labelTag.textContent = tag.label;
-        containerDiv.appendChild(labelTag);
-        containerDiv.appendChild(tag.inputTag);
-        
-        return containerDiv
-    
-    }
-
-    const createSubmitButton=()=>{
-        const button = document.createElement('button');
-        button.addEventListener('click',(event)=>{
-            event.preventDefault();
-            if (isformValid){
-                
-            }
-
-            
-        });
-        button.textContent = 'submit'
-        return button
-    }
-
-    const isformValid = ()=>{
-        const dataArray = tagArray.map((tag)=>(tag.formValidate()))
-            if (!(false in dataArray)){
-                console.log('pass')
-                return true
-            }
-            return false
-    }
-
-    const goToTheProjectTaskPage = ()=>{
-        
-    }
-
-    
-    const extractDataFromTheFormAndCreatObject =()=>{
-        let [title,discription,dueDate,project] = tagArray.map((tag)=>(tag.getValue()))
-        console.log(title,discription,dueDate,'sstyttytyt')
-        const taskList = toDoList(title,discription,dueDate);
-        console.log(taskList)
-        taskList.createProject(project)
-        taskList.addListToProject(project,taskList);
-        console.log(projectList,'data')
-    }
-
-
-    const removeForm=()=>{
-        parentTag.removeChild(form)
-    }
-
-
-    return {createForm}
-    
 }
+
+const dom = domHelper()
+
 
 function createInputTag(tagName,label,classes=[]){
     const inputTag = document.createElement(tagName);
@@ -145,5 +80,103 @@ function createInputDateTag(title,classes=[],isMandatory = false){
 }
 
 
+export function createTaskForm(parentTag){
+    
+    const tagArray = tags.inputs
+    const form = dom.createTag('form','task-form')
+    
 
+    const createForm = ()=>{
+        tagArray.forEach((tag)=>{
+            form.appendChild(containInputTagIntoDivWithALabel(tag));
+        });
+    
+        form.appendChild(createSubmitButton())
+        parentTag.appendChild(form)
+    }
+
+    const containInputTagIntoDivWithALabel = (tag)=>{
+        const containerDiv  = dom.createTag('div',tag.label+'-div')
+        const labelTag = dom.createTag('label','label-task-form',containerDiv,tag.label)
+        containerDiv.appendChild(tag.inputTag);
+        
+        return containerDiv
+    
+    }
+    const createSubmitButton=()=>{
+        const button = document.createElement('button');
+        button.addEventListener('click',(event)=>{
+            event.preventDefault();
+            if (isformValid){
+                const taskPage = displayTaskPage(parentTag)
+                const formDisplayButton = createFormDisplayButton(parentTag);
+                parentTag.removeChild(form)
+                taskPage.display()
+                formDisplayButton.addButton()
+
+                
+            }
+
+            
+        });
+        button.textContent = 'submit'
+        return button
+    }
+
+    const isformValid = ()=>{
+        const dataArray = tagArray.map((tag)=>(tag.formValidate()))
+            if (!(false in dataArray)){
+                console.log('pass')
+                return true
+            }
+            return false
+    }
+
+    return {createForm}
+}
+
+
+function displayTaskPage(parentTag){
+    const tagArray = tags.inputs
+    const data = extractDataFromTheFormAndCreatObject()
+    
+    const ourProject = displayProject(parentTag)
+    
+    const display = ()=>{
+        data.getDataAndStore()
+        const currentProject =data.getCurrentProject()
+        ourProject.displayProjectInParent(currentProject)
+        
+    }
+
+    
+    const removeForm=()=>{
+        parentTag.removeChild(form)
+    }
+
+    return {display}
+}
+
+
+function extractDataFromTheFormAndCreatObject(){
+    const tagArray = tags.inputs
+    let currentProject = 'Default'
+
+    const  getDataAndStore=()=>{
+        let [title,discription,dueDate,project] = tagArray.map((tag)=>(tag.getValue()))
+        console.log(title,discription,dueDate,'sstyttytyt')
+        const taskList = toDoList(title,discription,dueDate);
+        console.log(taskList)
+        taskList.createProject(project)
+        taskList.addListToProject(project,taskList);
+        console.log(projectList,'data')
+        currentProject = project
+    }
+
+    const getCurrentProject = ()=>{
+        return currentProject
+    }
+
+    return {getDataAndStore,getCurrentProject}
+}
 
