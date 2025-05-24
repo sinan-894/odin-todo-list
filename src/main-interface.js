@@ -16,7 +16,7 @@ export function mainInterface(){
     const mainContent = dom.createTag('div','main-div') 
     const giveHeading = dom.createTag('h1','heading-todo',header,'TODO')
 
-    return Object.assign({},divContainer(header,sideBar,mainContent),createFormDisplayButton(),displayProjects(),createTaskForm())
+    return Object.assign({},divContainer(header,sideBar,mainContent),createFormDisplayButton(),displayProjects())
 
 }
 
@@ -57,6 +57,7 @@ export function displayProjects(){
 
     const addProjectsNameToSideBar = ()=>{
         const sideBar = document.querySelector('.sidebar-div')
+        sideBar.innerHTML  = ""
         const projects = Object.keys(projectList);
         const projectsDisplayDiv = document.createElement("div");
         projectsDisplayDiv.classList.add('sidebar-project-list')
@@ -79,9 +80,11 @@ export function displayProjects(){
 
 
     const getProjectTaskDataIntoDiv = (project)=>{
-        const taksList  = projectList[project];
+        console.log(project)
+        const taskList  = projectList[project];
+        console.log(taskList)
         const taksListDiv = dom.createTag('div','task-list-div');
-        taksList.forEach((task)=>{
+        taskList.forEach((task)=>{
             let taskDiv = dom.createTag('div','task-div',taksListDiv);
             let title = dom.createTag('h3','title-task', taskDiv, task.title)
             let dueDate = dom.createTag('h4','due-date', taskDiv,task.dueDate)
@@ -94,101 +97,5 @@ export function displayProjects(){
     return {addProjectsNameToSideBar,displayProjectInParent}
 }
 
-const tags ={
-    inputs:[
-        createInputTextTag('title',['input-task','title','text'],true),
-        createTextAreaTag('discription',['input-task','discription','text']),
-        createInputDateTag('duedate',['input-task','due-date','date'],true),
-        createInputTextTag('project',['input-task','project','text']),
-    ]   
-
-}
-
-//code to create form
-export function createTaskForm(){
-    //depends on :createFormDisplayButton,extractDataFromTheFormAndCreatObject,displayProject
-    const tagArray = tags.inputs
-    const createForm = (onSubmitButtonPress)=>{
-        const form = dom.createTag('form','task-form')
-        tagArray.forEach((tag)=>{
-            console.log('looping')
-            form.appendChild(containInputTagIntoDivWithALabel(tag));
-        });
-        const button  = dom.createTag('button','task-submit-button',form,'submit')
-        return form
-    }
-    const containInputTagIntoDivWithALabel = (tag)=>{
-        const containerDiv  = dom.createTag('div',tag.label+'-div')
-        const labelTag = dom.createTag('label','label-task-form',containerDiv,tag.label)
-        containerDiv.appendChild(tag.inputTag);
-        
-        return containerDiv
-    
-    }
-
-    return {createForm}
-}
-
-function createInputTag(tagName,label,classes=[]){
-    const inputTag = document.createElement(tagName);
-    inputTag.id = label
-    inputTag.classList.add(classes)
-
-    const getValue = ()=>(inputTag.value)
-
-    return {inputTag,label,getValue}
-}
-
-function createTextAreaTag(title,classes=[],isMandatory = false){
-    const {inputTag,label,getValue} = createInputTag('textarea',title,classes)
-
-    const formValidate = ()=>(true)
-
-    return {inputTag,label,getValue,formValidate}
-    
-    }
-
-function createInputTextTag(title,classes=[],isMandatory = false){
-    const {inputTag,label,getValue} = createInputTag('input',title,classes)
-    inputTag.type = 'text';
-
-    const formValidate = ()=>{
-        if (isMandatory && inputTag.value==''){
-            alert('title cannot be empty')
-            return false
-        }
-        return true
-    }
-
-    return {inputTag,label,getValue,formValidate}
-}
-
-function createInputDateTag(title,classes=[],isMandatory = false){
-    const {inputTag,label,getValue} = createInputTag('input',title,classes)
-    inputTag.type = 'date';
-
-    const formValidate = ()=>{
-        if(isMandatory && !inputTag.value){
-            alert('enter a date')
-            return false
-        }
-        const today = todayDate()
-        const [year,month,date] = inputTag.value.split("-")
-        const inputDate = new Date(year,month,date);
-
-        if (compareAsc(today,inputDate)===1){
-            alert('Date already finished')
-            return false
-        }
-        return true
-    }
-
-    const todayDate = ()=>{
-        let today  = new Date()
-        return new Date(today.getFullYear(),today.getMonth()+1,today.getDate())
-    }
-    
-    return {inputTag,label,getValue,formValidate}
-}
 
 

@@ -1,10 +1,11 @@
 import { mainInterface } from "./main-interface";
-import { extractDataFromTheFormAndCreatObject } from "./input-data";
-import { projectList } from "./todo-list";
+import { createTaskForm } from "./form";
+
 
 
 export function display(){
     const htmlElements = mainInterface()
+    const formDisplay = createTaskForm()
     let mainDiv = null
 
     const setMainDiv = (tag)=>{
@@ -13,14 +14,12 @@ export function display(){
     const initialLoad  = ()=>{
         document.body.appendChild(htmlElements.createInterface())
         setMainDiv(document.querySelector(".main-div"))
-        const addFormButton = htmlElements.createAddFormButton()
-        mainDiv.appendChild(addFormButton)
-        htmlElements.addProjectsNameToSideBar()
-        modifyButtonsForEventHandling(addFormButton)
+        displaySidebar()
+        addCreateFormButton()
     }
 
-    const modifyButtonsForEventHandling=(addFormButton)=>{
-        modifyAddFormButton(addFormButton)
+    const displaySidebar=(addFormButton)=>{
+        htmlElements.addProjectsNameToSideBar()
         modifySidebarProjectButtons()
     }   
 
@@ -36,9 +35,14 @@ export function display(){
         button.addEventListener('click',addFormToContentDiv)
     }
 
+
     const addProjectToContentDiv=(project)=>{
         cleanContentDiv()
         htmlElements.displayProjectInParent(project)
+        addCreateFormButton()
+    }
+
+    const addCreateFormButton = ()=>{
         const addFormButton = htmlElements.createAddFormButton()
         modifyAddFormButton(addFormButton)
         mainDiv.appendChild(addFormButton)
@@ -46,13 +50,38 @@ export function display(){
 
     const addFormToContentDiv = ()=>{
         cleanContentDiv()
-        const form  = htmlElements.createForm()
+        const form  = formDisplay.createForm()
         mainDiv.appendChild(form)
+        modifyForm()
     }
 
     const cleanContentDiv = ()=>{
         mainDiv.innerHTML = ""
     }
 
+    const modifyForm = ()=>{
+        const submitButton = document.querySelector('.task-submit-button');
+        submitButton.addEventListener('click',(event)=>{
+            event.preventDefault()
+            onSubmitButtonPress()
+        })
+
+    }
+
+    const onSubmitButtonPress = ()=>{
+
+        if (formDisplay.isFormValid()){
+            formDisplay.getDataAndStore()
+            cleanContentDiv()
+            addProjectToContentDiv(formDisplay.getCurrentProject())
+            htmlElements.addProjectsNameToSideBar()
+            modifySidebarProjectButtons()
+            addCreateFormButton()
+
+        }
+    }
+
     return {initialLoad}
 }
+
+
