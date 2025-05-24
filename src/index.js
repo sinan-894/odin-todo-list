@@ -1,9 +1,4 @@
-import { createTaskForm } from "./input-data.js";
-import { compareAsc } from "date-fns";
-
-import { toDoList,projectList } from "./todo-list.js";
-
-import { mainInterface } from "./task-display.js";
+import { mainInterface } from "./main-interface.js";
 
 
 const createDisplay = mainInterface()
