@@ -16,9 +16,7 @@ export function mainInterface(){
     const mainContent = dom.createTag('div','main-div') 
     const giveHeading = dom.createTag('h1','heading-todo',header,'TODO')
 
-    const formDisplayButton   = createFormDisplayButton().create()
-    mainContent.appendChild(formDisplayButton)
-    return Object.assign({},divContainer(header,sideBar,mainContent),createFormDisplayButton,displayProjects)
+    return Object.assign({},divContainer(header,sideBar,mainContent),createFormDisplayButton(),displayProjects(),createTaskForm())
 
 }
 
@@ -39,7 +37,7 @@ const divContainer = (...tags)=>{
 
 export const createFormDisplayButton  = ()=>{
     
-    const create = ()=>{
+    const createAddFormButton = ()=>{
         const button = dom.createTag('button','button-create-form')
         addImageToButton(button)
         return button
@@ -51,7 +49,7 @@ export const createFormDisplayButton  = ()=>{
         button.appendChild(svgHandler)
     }
 
-    return {create}
+    return {createAddFormButton}
 }
 
 export function displayProjects(){
@@ -61,6 +59,7 @@ export function displayProjects(){
         const sideBar = document.querySelector('.sidebar-div')
         const projects = Object.keys(projectList);
         const projectsDisplayDiv = document.createElement("div");
+        projectsDisplayDiv.classList.add('sidebar-project-list')
         projects.forEach((project)=>{
             let button =dom.createTag('button','project-button',projectsDisplayDiv,project)
         })
@@ -129,8 +128,6 @@ export function createTaskForm(){
 
     return {createForm}
 }
-
-
 
 function createInputTag(tagName,label,classes=[]){
     const inputTag = document.createElement(tagName);

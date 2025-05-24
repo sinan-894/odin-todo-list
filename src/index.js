@@ -1,11 +1,9 @@
-import { mainInterface } from "./main-interface.js";
+import { display } from "./display-dynamics"
 
 
-const createDisplay = mainInterface()
+const k = display()
 
-document.body.appendChild(createDisplay.createInterface())
-
-
+k.initialLoad()
 
 
 
