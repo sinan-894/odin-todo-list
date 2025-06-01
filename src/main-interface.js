@@ -5,7 +5,6 @@ import buttonSvg from "./icons8-plus.svg"
 import { createTaskForm } from "./form";
 
 const dom = domHelper()
-const form = createTaskForm()
 
 
 export function mainInterface(){
@@ -125,33 +124,36 @@ export function displayProjects(){
         const addTaskButton = document.createElement('button')
         addTaskButton.textContent = 'add task'
         addTaskButton.addEventListener('click',()=>{
+            console.log('klklklklklklklklklklkl')
             container.innerHTML = ""
-            container.appendChild(form.createForm())
-            modifyFormSubmitButton(onSubmitButtonPressForCreatingTask)
+            const addTaskForm = createTaskForm()
+            console.log(container)
+            container.appendChild(addTaskForm.createForm())
+            modifyFormSubmitButton(onSubmitButtonPressForCreatingTask,addTaskForm)
 
         })
         container.appendChild(addTaskButton)
         return container
     }
 
-    const modifyFormSubmitButton = (onSubmitButtonPress,update=null)=>{
-        const submitButton = document.querySelector('.task-submit-button');
+    const modifyFormSubmitButton = (onSubmitButtonPress,form,update=null)=>{
+        const submitButton = form.submitButton
         submitButton.addEventListener('click',(event)=>{
             event.preventDefault()
             if (form.isFormValid()){
-                onSubmitButtonPress(update)
+                onSubmitButtonPress(form,update)
             } 
         })
 
     }
 
-    const onSubmitButtonPressForCreatingTask = ()=>{
+    const onSubmitButtonPressForCreatingTask = (form)=>{
         form.getDataAndStoreToProjectList(currentProject)
         displayProjectInParent(currentProject)
        
     }
 
-    const onSubmitButtonPressForEditingTask = (task)=>{
+    const onSubmitButtonPressForEditingTask = (form,task)=>{
         let [title,discription,dueDate] = form.getData()
         task.title = title
         task.discription = discription
@@ -183,8 +185,10 @@ export function displayProjects(){
         button.textContent = 'edit'
         button.addEventListener('click',()=>{
             container.innerHTML = ""
-            container.appendChild(form.createForm())
-            modifyFormSubmitButton(onSubmitButtonPressForEditingTask,task)
+            const editTaskForm = createTaskForm()
+            
+            container.appendChild(editTaskForm.createForm())
+            modifyFormSubmitButton(onSubmitButtonPressForEditingTask,editTaskForm,task)
             
 
         })

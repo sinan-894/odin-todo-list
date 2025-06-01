@@ -4,42 +4,46 @@ import { toDoList,projectList } from "./todo-list";
 import { compareAsc } from "date-fns";
 const dom= domHelper()    
 
-const tags ={
-    inputs:[
-        createInputTextTag('title',['input-task','title','text'],true),
-        createTextAreaTag('discription',['input-task','discription','text']),
-        createInputDateTag('duedate',['input-task','due-date','date'],true),
-    ]   
-
-}
 
 //code to create form
 export function createTaskForm(){
-    const tagArray = tags.inputs
+
+
+    const submitButton = dom.createTag('button','task-submit-button',null,'submit')
+    const tagArray =[
+        createInputTextTag('title',['input-task','title','text'],true),
+        createTextAreaTag('discription',['input-task','discription','text']),
+        createInputDateTag('duedate',['input-task','due-date','date'],true),
+    ] 
+    
+    
+
     const createForm = (onSubmitButtonPress)=>{
         const form = dom.createTag('form','task-form')
-        form.autocomplete = "off"
         tagArray.forEach((tag)=>{
             console.log('looping')
             form.appendChild(containInputTagIntoDivWithALabel(tag));
         });
-        const button  = dom.createTag('button','task-submit-button',form,'submit')
+
+        dom.makeParent(form,submitButton)
+
         return form
     }
     const containInputTagIntoDivWithALabel = (tag)=>{
         const containerDiv  = dom.createTag('div',tag.label+'-div')
         const labelTag = dom.createTag('label','label-task-form',containerDiv,tag.label)
+        labelTag.for = tag.label
+        console.log(labelTag.for)
         containerDiv.appendChild(tag.inputTag);
         
         return containerDiv
     
     }
 
-    return Object.assign({createForm},validator(),extractDataFromTheFormAndCreatObject())
+    return Object.assign({createForm,submitButton},validator(tagArray),extractDataFromTheFormAndCreatObject(tagArray))
 }
 
-const validator =()=>{
-    const tagArray = tags.inputs
+const validator =(tagArray)=>{
     const isFormValid = ()=>{
         const validationResultList = tagArray.map((tag)=>(tag.formValidate()))
         console.log(validationResultList.includes(false))
@@ -54,7 +58,7 @@ function createInputTag(tagName,label,classes=[]){
     const inputTag = document.createElement(tagName);
     inputTag.id = label
     inputTag.autocomplete = "off"
-    inputTag.classList.add(classes)
+    classes.forEach((styleClass)=>{inputTag.classList.add(styleClass)})
 
     const getValue = ()=>(inputTag.value)
 
@@ -116,8 +120,7 @@ function createInputDateTag(title,classes=[],isMandatory = false){
 
 
 
-function extractDataFromTheFormAndCreatObject(){
-    const tagArray = tags.inputs
+function extractDataFromTheFormAndCreatObject(tagArray){
 
 
     const getData = ()=>(tagArray.map((tag)=>(tag.getValue())))

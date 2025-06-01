@@ -13,9 +13,10 @@ export function display(){
     }
     const initialLoad  = ()=>{
         document.body.appendChild(htmlElements.createInterface())
-        setMainDiv(document.querySelector(".main-div"))
-        displaySidebar()
-        addCreateFormButton()
+        htmlElements.addProjectsNameToSideBar()
+        htmlElements.displayProjectInParent()
+        
+        
     }
 
     const displaySidebar=(addFormButton)=>{
