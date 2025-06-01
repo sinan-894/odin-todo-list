@@ -74,8 +74,7 @@ export function display(){
             formDisplay.getDataAndStore()
             cleanContentDiv()
             addProjectToContentDiv(formDisplay.getCurrentProject())
-            htmlElements.addProjectsNameToSideBar()
-            modifySidebarProjectButtons()
+            displaySidebar()
             addCreateFormButton()
 
         }

@@ -24,9 +24,9 @@ const creator = ()=>{
 }
 
 const adder = ()=>{
-    const addListToProject = (project,list)=>{
+    const addToProjectList = (project,list)=>{
         projectList[project].push(list);
     }
-    return {addListToProject}
+    return {addToProjectList}
 }
 

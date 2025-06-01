@@ -9,7 +9,6 @@ const tags ={
         createInputTextTag('title',['input-task','title','text'],true),
         createTextAreaTag('discription',['input-task','discription','text']),
         createInputDateTag('duedate',['input-task','due-date','date'],true),
-        createInputTextTag('project',['input-task','project','text']),
     ]   
 
 }
@@ -19,6 +18,7 @@ export function createTaskForm(){
     const tagArray = tags.inputs
     const createForm = (onSubmitButtonPress)=>{
         const form = dom.createTag('form','task-form')
+        form.autocomplete = "off"
         tagArray.forEach((tag)=>{
             console.log('looping')
             form.appendChild(containInputTagIntoDivWithALabel(tag));
@@ -53,6 +53,7 @@ const validator =()=>{
 function createInputTag(tagName,label,classes=[]){
     const inputTag = document.createElement(tagName);
     inputTag.id = label
+    inputTag.autocomplete = "off"
     inputTag.classList.add(classes)
 
     const getValue = ()=>(inputTag.value)
@@ -72,6 +73,7 @@ function createTextAreaTag(title,classes=[],isMandatory = false){
 function createInputTextTag(title,classes=[],isMandatory = false){
     const {inputTag,label,getValue} = createInputTag('input',title,classes)
     inputTag.type = 'text';
+    inputTag.value = " "
 
     const formValidate = ()=>{
         if (isMandatory && inputTag.value==''){
@@ -116,22 +118,18 @@ function createInputDateTag(title,classes=[],isMandatory = false){
 
 function extractDataFromTheFormAndCreatObject(){
     const tagArray = tags.inputs
-    let currentProject = 'Default'
 
-    const  getDataAndStore=()=>{
-        let [title,discription,dueDate,project] = tagArray.map((tag)=>(tag.getValue()))
+
+    const getData = ()=>(tagArray.map((tag)=>(tag.getValue())))
+    
+    const  getDataAndStoreToProjectList=(project)=>{
+        let [title,discription,dueDate] = getData()
         console.log(title,discription,dueDate,'sstyttytyt')
         const taskList = toDoList(title,discription,dueDate);
         console.log(taskList)
-        taskList.createProject(project)
-        taskList.addListToProject(project,taskList);
+        taskList.addToProjectList(project,taskList);
         console.log(projectList)
-        currentProject = project
     }
 
-    const getCurrentProject = ()=>{
-        return currentProject
-    }
-
-    return {getDataAndStore,getCurrentProject}
+    return {getData,getDataAndStoreToProjectList}
 }
