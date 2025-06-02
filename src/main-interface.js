@@ -2,9 +2,10 @@ import "./style.css"
 import { domHelper } from "./dom";
 import { projectList } from "./todo-list";
 import buttonSvg from "./icons8-plus.svg"
-import { createTaskForm } from "./form";
+import { createDialog } from "./form";
 
 const dom = domHelper()
+const dialog = createDialog()
 
 
 export function mainInterface(){
@@ -16,7 +17,9 @@ export function mainInterface(){
     const mainContent = dom.createTag('div','main-div') 
     const giveHeading = dom.createTag('h1','heading-todo',header,'TODO')
 
-    return Object.assign({},divContainer(header,sideBar,mainContent),createFormDisplayButton(),displayProjects())
+    
+
+    return Object.assign({},divContainer(header,sideBar,mainContent,dialog.tag),displayProjectSidebar(),displayProject())
 
 }
 
@@ -35,27 +38,10 @@ const divContainer = (...tags)=>{
     return {createInterface}
 }
 
-export const createFormDisplayButton  = ()=>{
-    
-    const createAddFormButton = ()=>{
-        const button = dom.createTag('button','button-create-form')
-        addImageToButton(button)
-        return button
-        
-    }    
-    const addImageToButton = (button)=>{
-        const svgHandler = document.createElement('img');
-        svgHandler.src = buttonSvg;
-        button.appendChild(svgHandler)
-    }
 
-    return {createAddFormButton}
-}
+function displayProjectSidebar(){
 
-export function displayProjects(){
-    //depended on : formDisplayButton
-
-    let currentProject  = 'Default'
+    let {currentProject,updateCurrentProject,displayProjectInParent} = displayProject()
 
     const addProjectsNameToSideBar = ()=>{
         const sideBar = document.querySelector('.sidebar-div')
@@ -66,8 +52,8 @@ export function displayProjects(){
         projects.forEach((project)=>{
             let button = dom.createTag('button','project-button',projectsDisplayDiv,project)
             button.addEventListener('click',()=>{
-                currentProject = project
-                displayProjectInParent(project)
+                updateCurrentProject(project)
+                displayProjectInParent()
             })
         })
 
@@ -106,7 +92,21 @@ export function displayProjects(){
         return input
     }
 
+    return {addProjectsNameToSideBar}
+}
+
+function displayProject(){
+    let currentProject  = 'Default'
+
+
+    const updateCurrentProject = (project)=>{
+        currentProject = project
+    }
+
+    const getCurrentProject = ()=>(currentProject)
+
     const displayProjectInParent = ()=>{
+        console.log('in parent')
         const parentDiv   = document.querySelector(".main-div");
         parentDiv.innerHTML = ""
         const projectDiv  = dom.createTag('div','project-div');
@@ -115,52 +115,12 @@ export function displayProjects(){
         dom.makeParent(projectDiv,taskList)
         dom.makeParent(projectDiv,addTaskContainer())
         dom.makeParent(parentDiv,projectDiv)
-
-
+        
     }
 
-    const addTaskContainer = ()=>{
-        const container = document.createElement('div');
-        const addTaskButton = document.createElement('button')
-        addTaskButton.textContent = 'add task'
-        addTaskButton.addEventListener('click',()=>{
-            console.log('klklklklklklklklklklkl')
-            container.innerHTML = ""
-            const addTaskForm = createTaskForm()
-            console.log(container)
-            container.appendChild(addTaskForm.createForm())
-            modifyFormSubmitButton(onSubmitButtonPressForCreatingTask,addTaskForm)
+    const {createDeleteTaskButton,addTaskContainer,createEditTaskButton} = displayProjectButtonLogic(getCurrentProject,displayProjectInParent)
 
-        })
-        container.appendChild(addTaskButton)
-        return container
-    }
-
-    const modifyFormSubmitButton = (onSubmitButtonPress,form,update=null)=>{
-        const submitButton = form.submitButton
-        submitButton.addEventListener('click',(event)=>{
-            event.preventDefault()
-            if (form.isFormValid()){
-                onSubmitButtonPress(form,update)
-            } 
-        })
-
-    }
-
-    const onSubmitButtonPressForCreatingTask = (form)=>{
-        form.getDataAndStoreToProjectList(currentProject)
-        displayProjectInParent(currentProject)
-       
-    }
-
-    const onSubmitButtonPressForEditingTask = (form,task)=>{
-        let [title,discription,dueDate] = form.getData()
-        task.title = title
-        task.discription = discription
-        task.dueDate = dueDate
-        displayProjectInParent()
-    }
-
+    
 
     const getProjectTaskDataIntoDiv = ()=>{
         console.log(currentProject)
@@ -173,26 +133,10 @@ export function displayProjects(){
             let title = dom.createTag('h3','title-task', taskDiv, task.title)
             let dueDate = dom.createTag('h4','due-date', taskDiv,task.dueDate)
             dom.makeParent(taskDiv,createDeleteTaskButton(taskListDiv,taskDiv,taskList,task))
-            dom.makeParent(taskDiv,editTaskButton(task,taskDiv))
+            dom.makeParent(taskDiv,createEditTaskButton(task,taskDiv))
         })
 
         return taskListDiv
-        
-    }
-
-    const editTaskButton = (task,container)=>{
-        const button = document.createElement('button');
-        button.textContent = 'edit'
-        button.addEventListener('click',()=>{
-            container.innerHTML = ""
-            const editTaskForm = createTaskForm()
-            
-            container.appendChild(editTaskForm.createForm())
-            modifyFormSubmitButton(onSubmitButtonPressForEditingTask,editTaskForm,task)
-            
-
-        })
-        return button
         
     }
 
@@ -217,6 +161,77 @@ export function displayProjects(){
 
     }
 
+    return {currentProject,updateCurrentProject,displayProjectInParent}
+}
+
+function displayProjectButtonLogic(currentProject,displayProjectInMain){
+
+    const {modifyFormSubmitButtonText,onSubmitButtonPressForCreatingTask,onSubmitButtonPressForEditingTask} = mainDialog(currentProject,displayProjectInMain)
+    
+    
+    const addTaskContainer = ()=>{
+        const container = document.createElement('div');
+        const addTaskButton = document.createElement('button')
+        addTaskButton.textContent = 'add task'
+
+        addTaskButton.addEventListener('click',()=>{
+            modifyFormSubmitButtonText('create');
+            dialog.show(onSubmitButtonPressForCreatingTask)
+        })
+
+        container.appendChild(addTaskButton)
+        return container
+    }
+
+    const createEditTaskButton = (task)=>{
+        const button = document.createElement('button');
+        const onSubmit = onSubmitButtonPressForEditingTask(task)
+        button.addEventListener('click',()=>{
+            modifyFormSubmitButtonText('edit');
+            dialog.show(onSubmit)
+        })
+        button.textContent = 'edit'
+        return button
+        
+    }
+
+    return Object.assign({addTaskContainer,createEditTaskButton},deleteTask())
+}
+
+function mainDialog(getCurrentProject,displayProjectInMain){
+    //depended on : formDisplayButton
+
+
+    const modifyFormSubmitButtonText = text=>{
+        const button = document.querySelector('.task-submit-button');
+        button.textContent = text
+    }
+
+
+
+    const onSubmitButtonPressForCreatingTask = ()=>{
+
+        dialog.getDataAndStoreToProjectList(getCurrentProject())
+        displayProjectInMain()
+       
+    }
+
+    const onSubmitButtonPressForEditingTask = (task)=>{
+        return ()=>{
+            let [title,discription,dueDate] = dialog.getData()
+            task.title = title
+            task.discription = discription
+            task.dueDate = dueDate
+            displayProjectInMain()
+        }
+    }
+
+    return {modifyFormSubmitButtonText,onSubmitButtonPressForCreatingTask,onSubmitButtonPressForEditingTask}
+
+    
+}
+
+function deleteTask(){
     const createDeleteTaskButton = (parent,child,list,value)=>{
         const deleteTaskButton = document.createElement('button')
         deleteTaskButton.textContent = 'delete'
@@ -238,8 +253,8 @@ export function displayProjects(){
         }
     }
 
-    return {addProjectsNameToSideBar,displayProjectInParent}
-}
+    return {createDeleteTaskButton}
 
+}
 
 

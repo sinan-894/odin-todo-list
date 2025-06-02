@@ -1,11 +1,11 @@
 import { mainInterface } from "./main-interface";
-import { createTaskForm } from "./form";
-
+// import { createTaskForm } from "./form";
+import { displayProjectInMain } from "./main-interface";
 
 
 export function display(){
     const htmlElements = mainInterface()
-    const formDisplay = createTaskForm()
+    // const formDisplay = createTaskForm()
     let mainDiv = null
 
     const setMainDiv = (tag)=>{
@@ -15,6 +15,7 @@ export function display(){
         document.body.appendChild(htmlElements.createInterface())
         htmlElements.addProjectsNameToSideBar()
         htmlElements.displayProjectInParent()
+        
         
         
     }

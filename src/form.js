@@ -6,29 +6,61 @@ const dom= domHelper()
 
 
 //code to create form
-export function createTaskForm(){
+function createTaskFormHandler(){
 
 
-    const submitButton = dom.createTag('button','task-submit-button',null,'submit')
+    
     const tagArray =[
         createInputTextTag('title',['input-task','title','text'],true),
         createTextAreaTag('discription',['input-task','discription','text']),
         createInputDateTag('duedate',['input-task','due-date','date'],true),
-    ] 
-    
+    ]
+
     
 
-    const createForm = (onSubmitButtonPress)=>{
+    const cleanFormValue = ()=>{
+        tagArray.forEach(tag=>{
+            tag.inputTag.value = ""
+        })
+    }
+    
+
+    const createForm = ()=>{
         const form = dom.createTag('form','task-form')
         tagArray.forEach((tag)=>{
             console.log('looping')
             form.appendChild(containInputTagIntoDivWithALabel(tag));
         });
 
-        dom.makeParent(form,submitButton)
+        dom.makeParent(form,createSubmitButton())
 
         return form
     }
+
+    let onSubmitPress = ()=>{
+        alert('no event handling function given')
+    }
+
+    const createSubmitButton = ()=>{
+        const submitButton = dom.createTag('button','task-submit-button',null,'submit')
+        submitButton.addEventListener('click',(event)=>{
+            event.preventDefault()
+            if (isFormValid()){
+                onSubmitPress()
+                cleanFormValue()
+                document.querySelector('dialog').close()
+            } 
+        })
+
+        return submitButton
+    }
+
+    const modifyFormSubmitButtonEventHandler = (newEventFunction)=>{
+        onSubmitPress = newEventFunction
+    }
+
+    
+
     const containInputTagIntoDivWithALabel = (tag)=>{
         const containerDiv  = dom.createTag('div',tag.label+'-div')
         const labelTag = dom.createTag('label','label-task-form',containerDiv,tag.label)
@@ -40,18 +72,38 @@ export function createTaskForm(){
     
     }
 
-    return Object.assign({createForm,submitButton},validator(tagArray),extractDataFromTheFormAndCreatObject(tagArray))
-}
-
-const validator =(tagArray)=>{
     const isFormValid = ()=>{
         const validationResultList = tagArray.map((tag)=>(tag.formValidate()))
         console.log(validationResultList.includes(false))
         if (validationResultList.includes(false)) return false
         return true
     }
-    return {isFormValid}
+
+    return Object.assign({createForm,modifyFormSubmitButtonEventHandler},extractDataFromTheFormAndCreatObject(tagArray))
 }
+
+
+export function createDialog(){
+
+    const {
+        createForm,modifyFormSubmitButtonEventHandler,
+        getDataAndStoreToProjectList,getData
+    } = createTaskFormHandler()
+
+    const tag = document.createElement('dialog');
+    tag.classList.add('form-dialog')
+    tag.appendChild(createForm())
+
+    const show = (onSubmitPress)=>{
+        modifyFormSubmitButtonEventHandler(onSubmitPress)
+        tag.showModal()
+    }
+    
+    return {tag,show,getDataAndStoreToProjectList,getData}
+
+}
+
+
 
 
 function createInputTag(tagName,label,classes=[]){
