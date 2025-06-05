@@ -17,14 +17,22 @@ body{
     height: 12vh;
     background-color: #131313;
     display: flex;
-    justify-content: center;
+    justify-content: start;
     align-items: center;
     grid-column: 1 / span 2;
+    padding-left:40px ;
 }
 
 .sidebar-div{
     background-color:var(--sidebar-color);
     height: max(88vh,100%);
+}
+
+.add-project-div{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
 }
 
 .heading-todo {
@@ -64,3 +72,75 @@ body{
 form >div> label{
     color: black;
 }
+
+.task-div{
+    display: flex;
+    background-color: darkblue;
+    height: 40px;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.task-div >input{
+    margin-right: 20px;
+}
+
+.task-div >h3 {
+    width:60%
+}
+
+.task-div >.due-date {
+    width: 20%;
+}
+
+.task-div >button {
+    height: 40px;
+}
+
+
+.add-task-container{
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.add-task-container >button{
+    font-size: 1.5em;
+    height: 40px;
+    border-radius: 10px;
+}
+
+.form-dialog{
+    width :60%
+}
+
+.task-form{
+    font-size: 1.5em;
+}
+
+.task-form  label{
+    display: block;
+}
+
+#title {
+    height: 30px;
+}
+
+.task-form  .input-task {
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.task-form .due-date{
+    width :20%;
+}
+#discription{
+    height: 200px;
+}
+
+.project-heading {
+    text-align: center;
+    font-size: 2.5em;
+}
+

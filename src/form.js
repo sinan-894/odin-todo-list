@@ -23,6 +23,15 @@ function createTaskFormHandler(){
             tag.inputTag.value = ""
         })
     }
+
+    const setFormValue = (...data)=>{
+        console.log(title,discription,duedate,data)
+        const arg = Array.from(arguments)
+        tagArray.forEach((tag,i)=>{
+            console.log(tag.inputTag)
+            tag.inputTag.value = data[i]
+        })
+    }
     
 
     const createForm = ()=>{
@@ -33,6 +42,7 @@ function createTaskFormHandler(){
         });
 
         dom.makeParent(form,createSubmitButton())
+        dom.makeParent(form,createCancelButton())
 
         return form
     }
@@ -51,6 +61,13 @@ function createTaskFormHandler(){
                 document.querySelector('dialog').close()
             } 
         })
+
+        return submitButton
+    }
+
+    const createCancelButton = ()=>{
+        const submitButton = dom.createTag('button','task-cancel-button',null,'cancel')
+        submitButton.addEventListener('click',(event)=>{document.querySelector('dialog').close()})
 
         return submitButton
     }
@@ -79,14 +96,14 @@ function createTaskFormHandler(){
         return true
     }
 
-    return Object.assign({createForm,modifyFormSubmitButtonEventHandler},extractDataFromTheFormAndCreatObject(tagArray))
+    return Object.assign({createForm,modifyFormSubmitButtonEventHandler,setFormValue},extractDataFromTheFormAndCreatObject(tagArray))
 }
 
 
 export function createDialog(){
 
     const {
-        createForm,modifyFormSubmitButtonEventHandler,
+        createForm,modifyFormSubmitButtonEventHandler,setFormValue,
         getDataAndStoreToProjectList,getData
     } = createTaskFormHandler()
 
@@ -94,8 +111,11 @@ export function createDialog(){
     tag.classList.add('form-dialog')
     tag.appendChild(createForm())
 
-    const show = (onSubmitPress)=>{
+    const show = (onSubmitPress,isEdit = false,title=null,discription=null,dueDate=null)=>{
         modifyFormSubmitButtonEventHandler(onSubmitPress)
+        if(isEdit){
+            setFormValue(title,discription,dueDate)
+        }
         tag.showModal()
     }
     
