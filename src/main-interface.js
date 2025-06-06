@@ -1,6 +1,6 @@
 import "./style.css"
 import { domHelper } from "./dom";
-import { projectList } from "./todo-list";
+import { projectList ,todayArray,tommarowArray,thisWeekArray,sortToDatesAndGetArrays} from "./todo-list";
 
 import { createDialog } from "./form";
 import { format } from "date-fns";
@@ -8,6 +8,7 @@ import { format } from "date-fns";
 
 const dom = domHelper()
 const dialog = createDialog()
+const daysCatogory = sortToDatesAndGetArrays()
 
 
 export function mainInterface(){
@@ -40,27 +41,32 @@ const divContainer = (...tags)=>{
     return {createInterface}
 }
 
-
 function displayProjectSidebar(updateCurrentProject,displayProjectInParent){
 
-    const {todayArray,tommarowArray,thisWeekArray} = sortToDatesAndGetArrays()
     const addProjectsNameToSideBar = ()=>{
         const sideBar = document.querySelector('.sidebar-div')
         sideBar.innerHTML  = ""
         const projects = Object.keys(projectList);
         const projectsDisplayDiv = document.createElement("div");
         projectsDisplayDiv.classList.add('sidebar-project-list')
+        createSidebarButton(projectsDisplayDiv,'Today')
+        createSidebarButton(projectsDisplayDiv,'Tommarow')
+        createSidebarButton(projectsDisplayDiv,'This Week')
         projects.forEach((project)=>{
-            let button = dom.createTag('button','project-button',projectsDisplayDiv,project)
-            button.addEventListener('click',()=>{
-                updateCurrentProject(project)
-                displayProjectInParent()
-            })
+            createSidebarButton(projectsDisplayDiv,project)
         })
 
         dom.makeParent(sideBar,projectsDisplayDiv)
         dom.makeParent(sideBar,addProjectContainer())
 
+    }
+
+    const createSidebarButton = (parent,name)=>{
+        const button = dom.createTag('button','project-button',parent,name)
+        button.addEventListener('click',()=>{
+            updateCurrentProject(name)
+            displayProjectInParent()
+        })
     }
     //this will first conatin a button then a input field and enter button to input project name
     const addProjectContainer = ()=>{
@@ -99,7 +105,7 @@ function displayProjectSidebar(updateCurrentProject,displayProjectInParent){
 
 function displayProject(){
     let currentProject  = 'Default'
-
+    const {getArray} = sortToDatesAndGetArrays()
 
     const updateCurrentProject = (project)=>{
         currentProject = project
@@ -108,6 +114,22 @@ function displayProject(){
     const getCurrentProject = ()=>(currentProject)
 
     const displayProjectInParent = ()=>{
+        if(currentProject=='Today'){
+            display(todayArray)
+        }
+        else if(currentProject=='Tommarow'){
+            display(tommarowArray)
+        }
+        else if(currentProject=='This Week'){
+            display(thisWeekArray)
+        }
+        else{
+            const taskList  = (projectList[currentProject])?projectList[currentProject]:[];
+            display(taskList)
+        }
+    }
+
+    const display = (taskList)=>{
         console.log('in parent')
         const parentDiv   = document.querySelector(".main-div");
         parentDiv.innerHTML = ""
@@ -115,19 +137,18 @@ function displayProject(){
         const projectHeader = dom.createTag('div','project-header',projectDiv)
         const projectHeading = dom.createTag('h2','project-heading',projectHeader,currentProject);
         dom.makeParent(projectHeader,deleteProjectButton())
-        const taskList = getProjectTaskDataIntoDiv(currentProject);
-        dom.makeParent(projectDiv,taskList)
+        const taskListDiv = getProjectTaskDataIntoDiv(taskList);
+        dom.makeParent(projectDiv,taskListDiv)
         dom.makeParent(projectDiv,addTaskContainer())
         dom.makeParent(parentDiv,projectDiv)
         
     }
+
     const {addProjectsNameToSideBar} = displayProjectSidebar(updateCurrentProject,displayProjectInParent)
     const {createDeleteTaskButton,addTaskContainer,createEditTaskButton,deleteProjectButton} = displayProjectButtonLogic(getCurrentProject,displayProjectInParent,addProjectsNameToSideBar)
     
     
-    const getProjectTaskDataIntoDiv = ()=>{
-        console.log(currentProject)
-        const taskList  = (projectList[currentProject])?projectList[currentProject]:[];
+    const getProjectTaskDataIntoDiv = (taskList)=>{
         console.log(taskList)
         const taskListDiv = dom.createTag('div','task-list-div');
         taskList.forEach((task)=>{
@@ -140,8 +161,9 @@ function displayProject(){
         })
 
         return taskListDiv
-        
     }
+
+   
 
     const createIsCompleteInputCheckBox = (task)=>{
         const inputCheckBox = document.createElement('input');
@@ -180,7 +202,7 @@ function displayProjectButtonLogic(getCurrentProject,displayProjectInMain,addPro
 
         addTaskButton.addEventListener('click',()=>{
             modifyFormSubmitButtonText('create');
-            dialog.show(onSubmitButtonPressForCreatingTask)
+            dialog.show(onSubmitButtonPressForCreatingTask);
         })
 
         container.appendChild(addTaskButton)
@@ -234,6 +256,7 @@ function mainDialog(getCurrentProject,displayProjectInMain){
     const onSubmitButtonPressForCreatingTask = ()=>{
 
         dialog.getDataAndStoreToProjectList(getCurrentProject())
+        daysCatogory.sortDatesToCatogory()
         displayProjectInMain()
        
     }
@@ -280,47 +303,5 @@ function deleteTask(){
 }
 
 
-function sortToDatesAndGetArrays(){
-    const todayDate = new Date(new Date().getFullYear(),new Date().getMonth(),new Date().getDate())
-
-    const totalTaskArray = (()=>{
-        const projects = Object.keys(projectList)
-        const totalArray = []
-        projects.forEach((project)=>{
-            let list = projectList[project]
-            totalArray.concat(list)
-        })
-
-        return totalArray
-    })()
-
-    const todayArray = []
-    const tommarowArray = []
-    const thisWeekArray = []
-
-    const sortDatesToCatogory=()=>{
-        totalTaskArray.forEach((task)=>{
-            let [year,month,date]  = task.dueDate
-            let dueDate = new Date(year,month,date)
-            const dist = formatDistanceStrict(b,a)
-            const [distNumber,distType] = dist.split(' ')
-            if (distNumber==1&&distType == 'days'){
-                tommarowArray.push(task)
-            }
-            else if(distNumber==0){
-                todayArray.push(task)
-            }
-            else if(distNumber<=7&&distType == 'days'){
-                thisWeekArray.push(task)
-            }
-            
-        })
-    }
-
-    sortDatesToCatogory()
-
-    return {todayArray,tommarowArray,thisWeekArray}
-    
-}
 
 

@@ -2,7 +2,9 @@
 import { domHelper } from "./dom";
 import { toDoList,projectList } from "./todo-list";
 import { compareAsc } from "date-fns";
-const dom= domHelper()    
+import { sortToDatesAndGetArrays } from "./todo-list";
+const dom= domHelper() 
+const dayCatogory = sortToDatesAndGetArrays()    
 
 
 //code to create form
@@ -203,6 +205,7 @@ function extractDataFromTheFormAndCreatObject(tagArray){
         const taskList = toDoList(title,discription,dueDate);
         console.log(taskList)
         taskList.addToProjectList(project,taskList);
+        dayCatogory.sortDatesToCatogory()
         console.log(projectList)
     }
 
