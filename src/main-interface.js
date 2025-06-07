@@ -94,8 +94,18 @@ function displayProjectSidebar(updateCurrentProject,displayProjectInParent){
         input.type = 'text'
         input.addEventListener('keypress',(event)=>{
             if(event.key=='Enter'){
-                projectList[input.value] = []
-                addProjectsNameToSideBar()
+                console.log(!(input.value in projectList),input.value,'90909000',['Today','Tommarow','This Week'].includes(input.value))
+                if(!(input.value in projectList) && 
+                !['Today','Tommarow','This Week'].includes(input.value)
+                && input.value!='' ){
+                    projectList[input.value] = []
+                    addProjectsNameToSideBar()
+                }
+                else{
+                    console.log('nothubg happend')
+                    alert('project already exist');
+                }
+                
             }
         })
         return input
