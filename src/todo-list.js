@@ -1,5 +1,5 @@
 
-import { format,formatDistanceStrict } from "date-fns";
+import { compareAsc, format,formatDistanceStrict } from "date-fns";
 
 
 export const todayArray = []
@@ -33,12 +33,26 @@ const adder = ()=>{
     return {addToProjectList}
 }
 
-export function sortToDatesAndGetArrays(){
+function dateManager(){
     const todayDate = new Date(new Date().getFullYear(),new Date().getMonth(),new Date().getDate())
-
+    
     
 
-    const totalTaskArray = ()=>{
+    const getInputDateForTask = (task) =>{
+        const [year,month,date]  = task.dueDate.split('-')
+        console.log(year,month,date)
+        return  new Date(year,month-1,date)
+    } 
+
+    return {todayDate,getInputDateForTask}
+}
+
+export function sortToDatesAndGetArrays(){
+    
+
+    const {todayDate,getInputDateForTask} = dateManager()
+
+    const totalTaskArray = (()=>{
         const projects = Object.keys(projectList)
         let totalArray = []
         projects.forEach((project)=>{
@@ -47,23 +61,17 @@ export function sortToDatesAndGetArrays(){
         })
 
         return totalArray
-    }
+    })()
 
     const sortDatesToCatogory=()=>{
-        console.log('days function caallled')
-        console.log('sort function called!!!!!!!!!!!!')
-        console.log(projectList)
-        console.log(totalTaskArray())
-        totalTaskArray().forEach((task)=>{
+        totalTaskArray.forEach((task)=>{
             pushTaskToDatesCatogory(task)
         })
     }
 
 
     const pushTaskToDatesCatogory = (task)=>{
-        let [year,month,date]  = task.dueDate.split('-')
-        console.log(year,month,date)
-        let dueDate = new Date(year,month-1,date)
+        const dueDate = getInputDateForTask(task)
         console.log(todayDate,dueDate)
         const dist = formatDistanceStrict(todayDate,dueDate)
         const [distNumber,distType] = dist.split(' ')
@@ -86,3 +94,24 @@ export function sortToDatesAndGetArrays(){
     
 }
 
+
+
+export function createProjectListManager(){
+    const {todayDate,getInputDateForTask} = dateManager()
+    
+    const removeFinishedDates = ()=>{
+        const projects = Object.keys(projectList)
+        projects.forEach(project=>{
+            let list =  projectList[project]
+            projectList[project] = list.filter((task)=>{
+                let dueDate = getInputDateForTask(task)
+                if (compareAsc(todayDate,dueDate)===1){
+                    return false
+                }
+                return true
+            })
+        })
+    }
+    
+    return {removeFinishedDates}
+}

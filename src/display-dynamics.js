@@ -2,12 +2,13 @@ import { mainInterface } from "./main-interface";
 // import { createTaskForm } from "./form";
 import { displayProjectInMain } from "./main-interface";
 
-import { sortToDatesAndGetArrays } from "./todo-list";
+import { sortToDatesAndGetArrays,createProjectListManager } from "./todo-list";
 
 
 export function display(){
     const htmlElements = mainInterface()
     const daysCatogory = sortToDatesAndGetArrays()
+    const manageProjectList = createProjectListManager()
     // const formDisplay = createTaskForm()
     let mainDiv = null
 
@@ -16,6 +17,7 @@ export function display(){
     }
     const initialLoad  = ()=>{
         document.body.appendChild(htmlElements.createInterface())
+        manageProjectList.removeFinishedDates()
         daysCatogory.sortDatesToCatogory()
         htmlElements.addProjectsNameToSideBar()
         htmlElements.displayProjectInParent()

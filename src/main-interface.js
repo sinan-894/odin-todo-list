@@ -3,7 +3,6 @@ import { domHelper } from "./dom";
 import { projectList ,todayArray,tommarowArray,thisWeekArray,sortToDatesAndGetArrays} from "./todo-list";
 
 import { createDialog } from "./form";
-import { format } from "date-fns";
 
 
 const dom = domHelper()

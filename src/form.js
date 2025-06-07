@@ -175,8 +175,9 @@ function createInputDateTag(title,classes=[],isMandatory = false){
         }
         const today = todayDate()
         const [year,month,date] = inputTag.value.split("-")
-        const inputDate = new Date(year,month,date);
-
+        const inputDate = new Date(year,month-1,date);
+        console.log('todays date',today)
+        console.log('input date',inputDate)
         if (compareAsc(today,inputDate)===1){
             alert('Date already finished')
             return false
@@ -186,7 +187,7 @@ function createInputDateTag(title,classes=[],isMandatory = false){
 
     const todayDate = ()=>{
         let today  = new Date()
-        return new Date(today.getFullYear(),today.getMonth()+1,today.getDate())
+        return new Date(today.getFullYear(),today.getMonth(),today.getDate())
     }
     
     return {inputTag,label,getValue,formValidate}
