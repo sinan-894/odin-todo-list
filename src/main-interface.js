@@ -8,7 +8,7 @@ import { format } from "date-fns";
 
 const dom = domHelper()
 const dialog = createDialog()
-const daysCatogory = sortToDatesAndGetArrays()
+
 
 
 export function mainInterface(){
@@ -256,7 +256,6 @@ function mainDialog(getCurrentProject,displayProjectInMain){
     const onSubmitButtonPressForCreatingTask = ()=>{
 
         dialog.getDataAndStoreToProjectList(getCurrentProject())
-        daysCatogory.sortDatesToCatogory()
         displayProjectInMain()
        
     }

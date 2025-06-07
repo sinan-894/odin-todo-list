@@ -55,31 +55,34 @@ export function sortToDatesAndGetArrays(){
         console.log(projectList)
         console.log(totalTaskArray())
         totalTaskArray().forEach((task)=>{
-            let [year,month,date]  = task.dueDate.split('-')
-            console.log(year,month,date)
-            let dueDate = new Date(year,month-1,date)
-            console.log(todayDate,dueDate)
-            const dist = formatDistanceStrict(todayDate,dueDate)
-            const [distNumber,distType] = dist.split(' ')
-            console.log(task,distNumber,distType,'testing sorting')
-            if (distNumber==1&&distType == 'day'){
-                tommarowArray.push(task)
-            }
-            else if(distNumber==0){
-                console.log('pushed to today')
-                todayArray.push(task)
-                console.log(todayArray)
-            }
-            else if(distNumber<=7&&distType == 'days'){
-                thisWeekArray.push(task)
-            }
-            
+            pushTaskToDatesCatogory(task)
         })
     }
 
+
+    const pushTaskToDatesCatogory = (task)=>{
+        let [year,month,date]  = task.dueDate.split('-')
+        console.log(year,month,date)
+        let dueDate = new Date(year,month-1,date)
+        console.log(todayDate,dueDate)
+        const dist = formatDistanceStrict(todayDate,dueDate)
+        const [distNumber,distType] = dist.split(' ')
+        console.log(task,distNumber,distType,'testing sorting')
+        if (distNumber==1&&distType == 'day'){
+            tommarowArray.push(task)
+        }
+        else if(distNumber==0){
+            console.log('pushed to today')
+            todayArray.push(task)
+            console.log(todayArray)
+        }
+        else if(distNumber<=7&&distType == 'days'){
+            thisWeekArray.push(task)
+        }
+    }
     
 
-    return {sortDatesToCatogory}
+    return {sortDatesToCatogory,pushTaskToDatesCatogory}
     
 }
 

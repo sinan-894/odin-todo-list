@@ -205,7 +205,7 @@ function extractDataFromTheFormAndCreatObject(tagArray){
         const taskList = toDoList(title,discription,dueDate);
         console.log(taskList)
         taskList.addToProjectList(project,taskList);
-        dayCatogory.sortDatesToCatogory()
+        dayCatogory.pushTaskToDatesCatogory(taskList)
         console.log(projectList)
     }
 
