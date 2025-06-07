@@ -1,12 +1,14 @@
 import "./style.css"
 import { domHelper } from "./dom";
-import { projectList ,todayArray,tommarowArray,thisWeekArray,sortToDatesAndGetArrays} from "./todo-list";
+import { projectList ,todayArray,tommarowArray,thisWeekArray,sortToDatesAndGetArrays,createProjectListManager} from "./todo-list";
 
 import { createDialog } from "./form";
 
 
 const dom = domHelper()
 const dialog = createDialog()
+const daysCatogory  = sortToDatesAndGetArrays()
+const manageprjectList = createProjectListManager()
 
 
 
@@ -255,6 +257,9 @@ function mainDialog(getCurrentProject,displayProjectInMain){
     const onSubmitButtonPressForCreatingTask = ()=>{
 
         dialog.getDataAndStoreToProjectList(getCurrentProject())
+        console.log(getCurrentProject(),projectList[getCurrentProject()],'before')
+        manageprjectList.sortTaskList(getCurrentProject())
+        console.log(getCurrentProject(),projectList[getCurrentProject()],'after')
         displayProjectInMain()
        
     }
@@ -265,9 +270,12 @@ function mainDialog(getCurrentProject,displayProjectInMain){
             task.title = title
             task.discription = discription
             task.dueDate = dueDate
+            manageprjectList.sortTaskList(getCurrentProject())
             displayProjectInMain()
         }
     }
+
+    
 
     return {modifyFormSubmitButtonText,onSubmitButtonPressForCreatingTask,onSubmitButtonPressForEditingTask}
 

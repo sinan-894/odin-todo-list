@@ -29,6 +29,7 @@ const creator = ()=>{
 const adder = ()=>{
     const addToProjectList = (project,list)=>{
         projectList[project].push(list);
+        
     }
     return {addToProjectList}
 }
@@ -112,6 +113,14 @@ export function createProjectListManager(){
             })
         })
     }
+
+    const sortTaskList = (project)=>{
+        projectList[project] = projectList[project].sort((a,b)=>{
+            let dueDateA = getInputDateForTask(a);
+            let duedateB = getInputDateForTask(b);
+            return compareAsc(dueDateA,duedateB)
+        })
+    }
     
-    return {removeFinishedDates}
+    return {removeFinishedDates,sortTaskList}
 }
