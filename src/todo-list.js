@@ -2,9 +2,7 @@
 import { compareAsc, format,formatDistanceStrict } from "date-fns";
 
 
-export const todayArray = []
-export const tommarowArray = []
-export const thisWeekArray = []
+
 
 export function toDoList(title,discription,dueDate){
     let isTaskComplete = false;
@@ -53,7 +51,7 @@ export function sortToDatesAndGetArrays(){
 
     const {todayDate,getInputDateForTask} = dateManager()
 
-    const totalTaskArray = (()=>{
+    const getTotalTaskArray = ()=>{
         const projects = Object.keys(projectList)
         let totalArray = []
         projects.forEach((project)=>{
@@ -62,40 +60,43 @@ export function sortToDatesAndGetArrays(){
         })
 
         return totalArray
-    })()
+    }
 
-    const sortDatesToCatogory=()=>{
-        totalTaskArray.forEach((task)=>{
-            pushTaskToDatesCatogory(task)
+    const getTodayArray = ()=>{
+        return getTotalTaskArray().filter((task)=>{
+            let [distNumber,distType] = getDateDistance(task).split(' ');
+            return (distNumber==0)
+            
         })
     }
 
+    const getTommarrowArray = ()=>{
+        return getTotalTaskArray().filter((task)=>{
+            let [distNumber,distType] = getDateDistance(task).split(' ');
+            
+            return (distNumber==1&&distType == 'day')
+            
+        })
+    }
 
-    const pushTaskToDatesCatogory = (task)=>{
+    const getThisWeekArray = ()=>{
+        return getTotalTaskArray().filter((task)=>{
+            let [distNumber,distType] = getDateDistance(task).split(' ');
+            return (distNumber<=7&&distType == 'days')
+        })
+    }
+
+    const getDateDistance = (task)=>{
         const dueDate = getInputDateForTask(task)
         console.log(todayDate,dueDate)
         const dist = formatDistanceStrict(todayDate,dueDate)
-        const [distNumber,distType] = dist.split(' ')
-        console.log(task,distNumber,distType,'testing sorting')
-        if (distNumber==1&&distType == 'day'){
-            tommarowArray.push(task)
-        }
-        else if(distNumber==0){
-            console.log('pushed to today')
-            todayArray.push(task)
-            console.log(todayArray)
-        }
-        else if(distNumber<=7&&distType == 'days'){
-            thisWeekArray.push(task)
-        }
-    }
-    
 
-    return {sortDatesToCatogory,pushTaskToDatesCatogory}
+        return dist
+    }
+
+    return {getTodayArray,getTommarrowArray,getThisWeekArray}
     
 }
-
-
 
 export function createProjectListManager(){
     const {todayDate,getInputDateForTask} = dateManager()

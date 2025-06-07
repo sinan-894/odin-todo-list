@@ -1,6 +1,6 @@
 import "./style.css"
 import { domHelper } from "./dom";
-import { projectList ,todayArray,tommarowArray,thisWeekArray,sortToDatesAndGetArrays,createProjectListManager} from "./todo-list";
+import { projectList ,sortToDatesAndGetArrays,createProjectListManager} from "./todo-list";
 
 import { createDialog } from "./form";
 
@@ -116,13 +116,13 @@ function displayProject(){
 
     const displayProjectInParent = ()=>{
         if(currentProject=='Today'){
-            display(todayArray)
+            display(daysCatogory.getTodayArray())
         }
         else if(currentProject=='Tommarow'){
-            display(tommarowArray)
+            display(daysCatogory.getTommarrowArray())
         }
         else if(currentProject=='This Week'){
-            display(thisWeekArray)
+            display(daysCatogory.getThisWeekArray())
         }
         else{
             const taskList  = (projectList[currentProject])?projectList[currentProject]:[];
