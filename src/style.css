@@ -35,23 +35,22 @@ body{
     margin-top: 10px;
 }
 
+.add-project-div > button {
+    
+    background-color: var(--sidebar-color);
+    border: 0px;
+}
+
+.add-project-div img{
+    width: 30px;
+}
+
 .heading-todo {
     color: var(--text-color);
 }
-.main-div > button{
-    position: fixed;
-    right: 20px;
-    bottom: 20px;
-    background-color:var(--background-color-global) ;
-    border: 0px;
-    padding: 0px;
 
-}
 
-.main-div>button>img{
-    height: 100px;
-    width: 100px;
-}
+
 
 .project-button{
     width: 100%;
@@ -75,7 +74,6 @@ form >div> label{
 
 .task-div{
     display: flex;
-    background-color: darkblue;
     height: 40px;
     align-items: center;
     margin-top: 20px;
@@ -106,10 +104,14 @@ form >div> label{
 }
 
 .add-task-container >button{
-    font-size: 1.5em;
-    height: 40px;
-    border-radius: 10px;
+    background-color: var(--background-color-global);
+    border: 0px;
 }
+
+.add-task-container img{
+    width: 50px;
+}
+
 
 .form-dialog{
     width :60%
@@ -143,4 +145,35 @@ form >div> label{
     text-align: center;
     font-size: 2.5em;
 }
+
+.project-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-left: 50px;
+    margin-right: 50px;
+}
+
+.project-header > button{
+    background-color: var(--background-color-global);
+    border: #0a0a0a;
+    width:30px;
+    height: 30px;
+}
+
+.project-header > button>img {
+    width:30px;
+}
+
+.task-div >button{
+    background-color: var(--background-color-global);
+    border: 0px;
+}
+
+.task-div >button>img{
+    width: 30px;
+}
+
+
+
 

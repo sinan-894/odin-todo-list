@@ -1,7 +1,9 @@
 import "./style.css"
 import { domHelper } from "./dom";
 import { projectList ,sortToDatesAndGetArrays,createProjectListManager} from "./todo-list";
-
+import editImage from "./edit-svgrepo-com.svg"
+import deleteImage from "./delete-svgrepo-com.svg"
+import addImage from "./add-to-svgrepo-com.svg"
 import { createDialog } from "./form";
 
 
@@ -44,6 +46,8 @@ const divContainer = (...tags)=>{
 
 function displayProjectSidebar(updateCurrentProject,displayProjectInParent){
 
+    const {giveButtonImage} = imageAdder()
+
     const addProjectsNameToSideBar = ()=>{
         const sideBar = document.querySelector('.sidebar-div')
         sideBar.innerHTML  = ""
@@ -80,7 +84,7 @@ function displayProjectSidebar(updateCurrentProject,displayProjectInParent){
 
     const addProjectButton = (container)=>{
         const button = document.createElement('button')
-        button.textContent = 'add Project'
+        giveButtonImage(button,addImage)
         button.addEventListener('click',()=>{
             container.innerHTML = ""
             container.appendChild(addInputProject())
@@ -126,13 +130,16 @@ function displayProject(){
 
     const displayProjectInParent = ()=>{
         if(currentProject=='Today'){
-            display(daysCatogory.getTodayArray())
+            display(daysCatogory.getTodayArray(),false)
         }
         else if(currentProject=='Tommarow'){
-            display(daysCatogory.getTommarrowArray())
+            display(daysCatogory.getTommarrowArray(),false)
         }
         else if(currentProject=='This Week'){
-            display(daysCatogory.getThisWeekArray())
+            display(daysCatogory.getThisWeekArray(),false)
+        }
+        else if(currentProject=='Default'){
+            display(projectList['Default'],false)
         }
         else{
             const taskList  = (projectList[currentProject])?projectList[currentProject]:[];
@@ -140,14 +147,14 @@ function displayProject(){
         }
     }
 
-    const display = (taskList)=>{
+    const display = (taskList,isCustomProject = true)=>{
         console.log('in parent')
         const parentDiv   = document.querySelector(".main-div");
         parentDiv.innerHTML = ""
         const projectDiv  = dom.createTag('div','project-div');
         const projectHeader = dom.createTag('div','project-header',projectDiv)
         const projectHeading = dom.createTag('h2','project-heading',projectHeader,currentProject);
-        dom.makeParent(projectHeader,deleteProjectButton())
+        if(isCustomProject) dom.makeParent(projectHeader,deleteProjectButton())
         const taskListDiv = getProjectTaskDataIntoDiv(taskList);
         dom.makeParent(projectDiv,taskListDiv)
         dom.makeParent(projectDiv,addTaskContainer())
@@ -204,12 +211,13 @@ function displayProjectButtonLogic(getCurrentProject,displayProjectInMain,addPro
 
     const {modifyFormSubmitButtonText,onSubmitButtonPressForCreatingTask,onSubmitButtonPressForEditingTask} = mainDialog(getCurrentProject,displayProjectInMain)
     
+    const {giveButtonImage} = imageAdder()
     
     const addTaskContainer = ()=>{
         const container = document.createElement('div');
         container.classList.add('add-task-container')
         const addTaskButton = document.createElement('button')
-        addTaskButton.textContent = 'add task'
+        giveButtonImage(addTaskButton,addImage);
 
         addTaskButton.addEventListener('click',()=>{
             modifyFormSubmitButtonText('create');
@@ -222,6 +230,7 @@ function displayProjectButtonLogic(getCurrentProject,displayProjectInMain,addPro
 
     const createEditTaskButton = (task)=>{
         const button = document.createElement('button');
+        button.classList.add('edit-button')
         const onSubmit = onSubmitButtonPressForEditingTask(task)
         console.log(task.title,'pppp')
         button.addEventListener('click',()=>{
@@ -229,14 +238,14 @@ function displayProjectButtonLogic(getCurrentProject,displayProjectInMain,addPro
             console.log(task.title,'ssss')
             dialog.show(onSubmit,true,task.title,task.discription,task.dueDate)
         })
-        button.textContent = 'edit'
+        giveButtonImage(button,editImage)
         return button
         
     }
 
     const deleteProjectButton = ()=>{
         const button = document.createElement('button')
-        button.textContent = 'delete'
+        giveButtonImage(button,deleteImage)
         button.classList.add('delete-project-button');
         button.addEventListener('click',()=>{
             console.log(getCurrentProject())
@@ -293,9 +302,10 @@ function mainDialog(getCurrentProject,displayProjectInMain){
 }
 
 function deleteTask(){
+    const {giveButtonImage} = imageAdder()
     const createDeleteTaskButton = (parent,child,list,value)=>{
         const deleteTaskButton = document.createElement('button')
-        deleteTaskButton.textContent = 'delete'
+        giveButtonImage(deleteTaskButton,deleteImage)
         deleteTaskButton.addEventListener('click',()=>{
             console.log(projectList)
             parent.removeChild(child)
@@ -316,6 +326,15 @@ function deleteTask(){
 
     return {createDeleteTaskButton}
 
+}
+
+function imageAdder(){
+    const giveButtonImage = (button,image)=>{
+        const img = document.createElement('img')
+        img.src = image
+        button.appendChild(img)
+    }
+    return {giveButtonImage}
 }
 
 

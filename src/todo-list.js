@@ -12,7 +12,7 @@ export function toDoList(title,discription,dueDate){
         creator(),adder())
 }
 
-export const projectList = {'Default':[{title:'hi',dueDate:'2025-5-5'},{title:'sdsds',dueDate:'2020-02-02'},{title:'today',dueDate:'2025-06-07'}]}
+export const projectList = {'Default':[{title:'hi',dueDate:'2025-5-5'},{title:'sdsds',dueDate:'2020-02-02'},{title:'today',dueDate:'2025-06-08'}]}
 
 const creator = ()=>{
     const createProject = (projectName)=>{
