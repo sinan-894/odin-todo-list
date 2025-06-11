@@ -132,20 +132,20 @@ function displayProject(){
     const displayProjectInParent = ()=>{
         if(currentProject=='Today'){
             const taskList  = manageProjectList.sortTaskList(daysCatogory.getTodayArray())
-            display(taskList)
+            display(taskList,false,false)
         }
         else if(currentProject=='Tommarow'){
             const taskList  = manageProjectList.sortTaskList(daysCatogory.getTommarrowArray())
-            display(taskList)
+            display(taskList,false,false)
         }
         else if(currentProject=='This Week'){
             const taskList  = manageProjectList.sortTaskList(daysCatogory.getThisWeekArray())
-            display(taskList)
+            display(taskList,false,false)
         }
         else if(currentProject=='Default'){
             console.log(projectList[currentProject],'dsdsds')
             const taskList  = manageProjectList.sortTaskList(projectList[currentProject])
-            display(taskList)
+            display(taskList,false)
         }
         else{
             const taskList  = manageProjectList.sortTaskList(projectList[currentProject])
@@ -153,7 +153,7 @@ function displayProject(){
         }
     }
 
-    const display = (taskList,isCustomProject = true)=>{
+    const display = (taskList,isCustomProject = true,isCatogory=true)=>{
         console.log('in parent')
         const parentDiv   = document.querySelector(".main-div");
         parentDiv.innerHTML = ""
@@ -163,7 +163,7 @@ function displayProject(){
         if(isCustomProject) dom.makeParent(projectHeader,deleteProjectButton())
         const taskListDiv = getProjectTaskDataIntoDiv(taskList);
         dom.makeParent(projectDiv,taskListDiv)
-        dom.makeParent(projectDiv,addTaskContainer())
+        if(isCatogory) dom.makeParent(projectDiv,addTaskContainer())
         dom.makeParent(parentDiv,projectDiv)
         
     }
