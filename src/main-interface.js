@@ -10,7 +10,7 @@ import { createDialog } from "./form";
 const dom = domHelper()
 const dialog = createDialog()
 const daysCatogory  = sortToDatesAndGetArrays()
-const manageprjectList = createProjectListManager()
+const manageprojectList = createProjectListManager()
 
 
 
@@ -186,6 +186,7 @@ function displayProject(){
     const createIsCompleteInputCheckBox = (task)=>{
         const inputCheckBox = document.createElement('input');
         inputCheckBox.type = 'checkbox'
+        inputCheckBox.checked = (task.isTaskComplete)?true:false
         inputCheckBox.addEventListener('click',()=>{
             if (inputCheckBox.checked) {
                 console.log('Checkbox is checked');
@@ -277,7 +278,7 @@ function mainDialog(getCurrentProject,displayProjectInMain){
 
         dialog.getDataAndStoreToProjectList(getCurrentProject())
         console.log(getCurrentProject(),projectList[getCurrentProject()],'before')
-        manageprjectList.sortTaskList(getCurrentProject())
+        manageprojectList.sortTaskList(getCurrentProject())
         console.log(getCurrentProject(),projectList[getCurrentProject()],'after')
         displayProjectInMain()
        
@@ -289,7 +290,7 @@ function mainDialog(getCurrentProject,displayProjectInMain){
             task.title = title
             task.discription = discription
             task.dueDate = dueDate
-            manageprjectList.sortTaskList(getCurrentProject())
+            manageprojectList.sortTaskList(getCurrentProject())
             displayProjectInMain()
         }
     }
