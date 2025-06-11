@@ -174,7 +174,7 @@ function displayProject(){
             dom.makeParent(taskDiv,createIsCompleteInputCheckBox(task))
             let title = dom.createTag('h3','title-task', taskDiv, task.title)
             let dueDate = dom.createTag('h4','due-date', taskDiv,task.dueDate)
-            dom.makeParent(taskDiv,createDeleteTaskButton(taskListDiv,taskDiv,taskList,task))
+            dom.makeParent(taskDiv,createDeleteTaskButton(taskListDiv,taskDiv,task))
             dom.makeParent(taskDiv,createEditTaskButton(task,taskDiv))
         })
 
@@ -304,25 +304,29 @@ function mainDialog(getCurrentProject,displayProjectInMain){
 
 function deleteTask(){
     const {giveButtonImage} = imageAdder()
-    const createDeleteTaskButton = (parent,child,list,value)=>{
+    const createDeleteTaskButton = (parent,child,value)=>{
         const deleteTaskButton = document.createElement('button')
         giveButtonImage(deleteTaskButton,deleteImage)
         deleteTaskButton.addEventListener('click',()=>{
             console.log(projectList)
             parent.removeChild(child)
-            removeFromList(list,value)
+            removeFromProjectList(value)
             console.log(projectList)
         })
 
         return deleteTaskButton
     }
 
-    const removeFromList = (list,value)=>{
+    const removeFromProjectList = (value)=>{
+        const projects = Object.keys(projectList)
+        projects.forEach((project)=>{
+            projectList[project].forEach((task,i)=>{
+                if (value==task){
+                    projectList[project].splice(i,1);
+                }
+            })
+        })
         
-        let index = list.indexOf(value);
-        if (index !== -1) {
-            list.splice(index, 1);
-        }
     }
 
     return {createDeleteTaskButton}
