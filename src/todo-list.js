@@ -115,8 +115,9 @@ export function createProjectListManager(){
         })
     }
 
-    const sortTaskList = (project)=>{
-        projectList[project] = projectList[project].sort((a,b)=>{
+    const sortTaskList = (list)=>{
+        console.log(list,'form')
+        return list.sort((a,b)=>{
             let dueDateA = getInputDateForTask(a);
             let duedateB = getInputDateForTask(b);
             return compareAsc(dueDateA,duedateB)

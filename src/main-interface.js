@@ -130,19 +130,24 @@ function displayProject(){
 
     const displayProjectInParent = ()=>{
         if(currentProject=='Today'){
-            display(daysCatogory.getTodayArray(),false)
+            const taskList  = manageprojectList.sortTaskList(daysCatogory.getTodayArray())
+            display(taskList)
         }
         else if(currentProject=='Tommarow'){
-            display(daysCatogory.getTommarrowArray(),false)
+            const taskList  = manageprojectList.sortTaskList(daysCatogory.getTommarrowArray())
+            display(taskList)
         }
         else if(currentProject=='This Week'){
-            display(daysCatogory.getThisWeekArray(),false)
+            const taskList  = manageprojectList.sortTaskList(daysCatogory.getThisWeekArray())
+            display(taskList)
         }
         else if(currentProject=='Default'){
-            display(projectList['Default'],false)
+            console.log(projectList[currentProject],'dsdsds')
+            const taskList  = manageprojectList.sortTaskList(projectList[currentProject])
+            display(taskList)
         }
         else{
-            const taskList  = (projectList[currentProject])?projectList[currentProject]:[];
+            const taskList  = manageprojectList.sortTaskList(projectList[currentProject])
             display(taskList)
         }
     }
@@ -278,7 +283,6 @@ function mainDialog(getCurrentProject,displayProjectInMain){
 
         dialog.getDataAndStoreToProjectList(getCurrentProject())
         console.log(getCurrentProject(),projectList[getCurrentProject()],'before')
-        manageprojectList.sortTaskList(getCurrentProject())
         console.log(getCurrentProject(),projectList[getCurrentProject()],'after')
         displayProjectInMain()
        
@@ -290,7 +294,6 @@ function mainDialog(getCurrentProject,displayProjectInMain){
             task.title = title
             task.discription = discription
             task.dueDate = dueDate
-            manageprojectList.sortTaskList(getCurrentProject())
             displayProjectInMain()
         }
     }
