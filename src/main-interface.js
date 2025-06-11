@@ -1,6 +1,6 @@
 import "./style.css"
 import { domHelper } from "./dom";
-import { projectList ,sortToDatesAndGetArrays,createProjectListManager} from "./todo-list";
+import { projectList ,sortToDatesAndGetArrays,createProjectListManager,createLocalStorageManager} from "./todo-list";
 import editImage from "./edit-svgrepo-com.svg"
 import deleteImage from "./delete-svgrepo-com.svg"
 import addImage from "./add-to-svgrepo-com.svg"
@@ -10,7 +10,8 @@ import { createDialog } from "./form";
 const dom = domHelper()
 const dialog = createDialog()
 const daysCatogory  = sortToDatesAndGetArrays()
-const manageprojectList = createProjectListManager()
+const manageProjectList = createProjectListManager()
+const manageLocalStorage = createLocalStorageManager()
 
 
 
@@ -98,12 +99,12 @@ function displayProjectSidebar(updateCurrentProject,displayProjectInParent){
         input.type = 'text'
         input.addEventListener('keypress',(event)=>{
             if(event.key=='Enter'){
-                console.log(!(input.value in projectList),input.value,'90909000',['Today','Tommarow','This Week'].includes(input.value))
                 if(!(input.value in projectList) && 
                 !['Today','Tommarow','This Week'].includes(input.value)
                 && input.value!='' ){
                     projectList[input.value] = []
                     addProjectsNameToSideBar()
+                    manageLocalStorage.createProjectInLocalStorage(input.value)
                 }
                 else{
                     console.log('nothubg happend')
@@ -130,24 +131,24 @@ function displayProject(){
 
     const displayProjectInParent = ()=>{
         if(currentProject=='Today'){
-            const taskList  = manageprojectList.sortTaskList(daysCatogory.getTodayArray())
+            const taskList  = manageProjectList.sortTaskList(daysCatogory.getTodayArray())
             display(taskList)
         }
         else if(currentProject=='Tommarow'){
-            const taskList  = manageprojectList.sortTaskList(daysCatogory.getTommarrowArray())
+            const taskList  = manageProjectList.sortTaskList(daysCatogory.getTommarrowArray())
             display(taskList)
         }
         else if(currentProject=='This Week'){
-            const taskList  = manageprojectList.sortTaskList(daysCatogory.getThisWeekArray())
+            const taskList  = manageProjectList.sortTaskList(daysCatogory.getThisWeekArray())
             display(taskList)
         }
         else if(currentProject=='Default'){
             console.log(projectList[currentProject],'dsdsds')
-            const taskList  = manageprojectList.sortTaskList(projectList[currentProject])
+            const taskList  = manageProjectList.sortTaskList(projectList[currentProject])
             display(taskList)
         }
         else{
-            const taskList  = manageprojectList.sortTaskList(projectList[currentProject])
+            const taskList  = manageProjectList.sortTaskList(projectList[currentProject])
             display(taskList)
         }
     }
@@ -256,6 +257,7 @@ function displayProjectButtonLogic(getCurrentProject,displayProjectInMain,addPro
         button.addEventListener('click',()=>{
             console.log(getCurrentProject())
             delete projectList[getCurrentProject()]
+            manageLocalStorage.removeProjectFromLocalStorage(getCurrentProject())
             console.log(projectList)
             document.querySelector('.main-div').innerHTML = ""
             addProjectsNameToSideBar()
@@ -282,11 +284,10 @@ function mainDialog(getCurrentProject,displayProjectInMain){
     const onSubmitButtonPressForCreatingTask = ()=>{
 
         dialog.getDataAndStoreToProjectList(getCurrentProject())
-        console.log(getCurrentProject(),projectList[getCurrentProject()],'before')
-        console.log(getCurrentProject(),projectList[getCurrentProject()],'after')
+        manageLocalStorage.updateLocalStorage(getCurrentProject())
         displayProjectInMain()
        
-    }
+}
 
     const onSubmitButtonPressForEditingTask = (task)=>{
         return ()=>{
@@ -294,6 +295,7 @@ function mainDialog(getCurrentProject,displayProjectInMain){
             task.title = title
             task.discription = discription
             task.dueDate = dueDate
+            manageLocalStorage.updateLocalStorage(manageProjectList.findProjectOftheTask(task))
             displayProjectInMain()
         }
     }
@@ -321,14 +323,9 @@ function deleteTask(){
     }
 
     const removeFromProjectList = (value)=>{
-        const projects = Object.keys(projectList)
-        projects.forEach((project)=>{
-            projectList[project].forEach((task,i)=>{
-                if (value==task){
-                    projectList[project].splice(i,1);
-                }
-            })
-        })
+        const project = manageProjectList.findProjectOftheTask(value)
+        projectList[project].splice(projectList[project].indexOf(value),1);
+        manageLocalStorage.updateLocalStorage(project)
         
     }
 

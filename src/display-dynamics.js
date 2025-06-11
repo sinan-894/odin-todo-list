@@ -2,12 +2,13 @@ import { mainInterface } from "./main-interface";
 // import { createTaskForm } from "./form";
 import { displayProjectInMain } from "./main-interface";
 
-import { sortToDatesAndGetArrays,createProjectListManager } from "./todo-list";
+import { sortToDatesAndGetArrays,createProjectListManager,createLocalStorageManager } from "./todo-list";
 
 
 export function display(){
     const htmlElements = mainInterface()
     const manageProjectList = createProjectListManager()
+    const manageLocalStorage = createLocalStorageManager()
     // const formDisplay = createTaskForm()
     let mainDiv = null
 
@@ -16,13 +17,12 @@ export function display(){
     }
     const initialLoad  = ()=>{
         document.body.appendChild(htmlElements.createInterface())
+        console.log(localStorage)
+        manageLocalStorage.updateProjectList()
         manageProjectList.removeFinishedDates()
         htmlElements.addProjectsNameToSideBar()
         htmlElements.displayProjectInParent()
 
-        
-        
-        
     }
 
     const displaySidebar=(addFormButton)=>{

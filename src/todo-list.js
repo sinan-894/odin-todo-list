@@ -123,6 +123,45 @@ export function createProjectListManager(){
             return compareAsc(dueDateA,duedateB)
         })
     }
+
+    const findProjectOftheTask = (value)=>{
+        const projects = Object.keys(projectList)
+        let projectFound = null
+        projects.forEach((project)=>{
+            projectList[project].forEach((task,i)=>{
+                if (value===task){
+                    projectFound = project
+                }
+            })
+        })
+
+        return projectFound
+
+    }
     
-    return {removeFinishedDates,sortTaskList}
+    return {removeFinishedDates,sortTaskList,findProjectOftheTask}
+}
+
+export function createLocalStorageManager(){
+
+    const updateProjectList = ()=>{
+        const projects = Object.keys(localStorage)
+        projects.forEach(project=>{
+            projectList[project] = JSON.parse(localStorage[project])
+        })
+    }
+
+    const updateLocalStorage = (project)=>{
+        localStorage[project] = JSON.stringify(projectList[project])
+    }
+
+    const removeProjectFromLocalStorage = (project)=>{
+        localStorage.removeItem(project)
+    }
+
+    const createProjectInLocalStorage = (project)=>{
+            localStorage.setItem(project,JSON.stringify([]))
+    }
+
+    return {updateProjectList,updateLocalStorage,removeProjectFromLocalStorage,createProjectInLocalStorage}
 }
