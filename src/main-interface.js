@@ -53,11 +53,14 @@ function displayProjectSidebar(updateCurrentProject,displayProjectInParent){
         const sideBar = document.querySelector('.sidebar-div')
         sideBar.innerHTML  = ""
         const projects = Object.keys(projectList);
+        projects.splice(projects.indexOf('Inbox'),1)
         const projectsDisplayDiv = document.createElement("div");
         projectsDisplayDiv.classList.add('sidebar-project-list')
         createSidebarButton(projectsDisplayDiv,'Today')
         createSidebarButton(projectsDisplayDiv,'Tommarow')
         createSidebarButton(projectsDisplayDiv,'This Week')
+        createSidebarButton(projectsDisplayDiv,'Inbox')
+        const sidebarProjectHeading = dom.createTag('h2','sidebar-project-heading',projectsDisplayDiv,'Project')
         projects.forEach((project)=>{
             createSidebarButton(projectsDisplayDiv,project)
         })
@@ -99,13 +102,16 @@ function displayProjectSidebar(updateCurrentProject,displayProjectInParent){
         input.type = 'text'
         input.addEventListener('keypress',(event)=>{
             if(event.key=='Enter'){
-                if(!(input.value in projectList) && 
-                !['Today','Tommarow','This Week'].includes(input.value)
-                && input.value!='' ){
+                if(input.value==''){
+                    addProjectsNameToSideBar()
+                }
+                else if(!(input.value in projectList) && 
+                !['Today','Tommarow','This Week'].includes(input.value)){
                     projectList[input.value] = []
                     addProjectsNameToSideBar()
                     manageLocalStorage.createProjectInLocalStorage(input.value)
                 }
+                
                 else{
                     console.log('nothubg happend')
                     alert('project already exist');
@@ -120,7 +126,7 @@ function displayProjectSidebar(updateCurrentProject,displayProjectInParent){
 }
 
 function displayProject(){
-    let currentProject  = 'Default'
+    let currentProject  = 'Inbox'
     const {getArray} = sortToDatesAndGetArrays()
 
     const updateCurrentProject = (project)=>{
@@ -142,7 +148,7 @@ function displayProject(){
             const taskList  = manageProjectList.sortTaskList(daysCatogory.getThisWeekArray())
             display(taskList,false,false)
         }
-        else if(currentProject=='Default'){
+        else if(currentProject=='Inbox'){
             console.log(projectList[currentProject],'dsdsds')
             const taskList  = manageProjectList.sortTaskList(projectList[currentProject])
             display(taskList,false)

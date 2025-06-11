@@ -45,6 +45,11 @@ body{
     width: 30px;
 }
 
+.add-project-div > input{
+    border: 3px solid black;
+    border-radius: 5px;
+}
+
 .heading-todo {
     color: var(--text-color);
 }
@@ -52,7 +57,7 @@ body{
 
 
 
-.project-button{
+.project-button,.project-button-custom{
     width: 100%;
     background-color:var(--sidebar-color) ;
     color: var(--text-color);
@@ -61,6 +66,17 @@ body{
     margin-top:10px ;
     padding-top: 5px;
     padding-bottom: 5px;
+    text-align: start;
+    font-weight: 600;
+    padding-left: 25px;
+}
+
+.sidebar-project-heading{
+    padding-left: 25px;
+}
+
+.project-button-custom{
+    color: black;
 }
 
 .project-button:hover{
@@ -173,7 +189,6 @@ form >div> label{
 .task-div >button>img{
     width: 30px;
 }
-
 
 
 
