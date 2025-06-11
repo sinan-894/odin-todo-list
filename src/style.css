@@ -141,7 +141,7 @@ form >div> label{
     display: block;
 }
 
-#title {
+#Title {
     height: 30px;
 }
 
@@ -153,7 +153,7 @@ form >div> label{
 .task-form .due-date{
     width :20%;
 }
-#discription{
+#Discription{
     height: 200px;
 }
 
@@ -190,5 +190,28 @@ form >div> label{
     width: 30px;
 }
 
+.form-dialog{
+    background-color: #a3a3a3;
+    border-radius: 20px;
+}
 
 
+.task-submit-button{
+    background-color: #dc2626;
+    border: 0px;
+    border-radius: 10px;
+    color: var(--text-color);
+    margin-right: 20px;
+    font-size: 0.7em;
+    padding: 5px 10px 5px 10px;
+}
+
+.task-cancel-button{
+    background-color: #16a34a;
+    border: 0px;
+    border-radius: 10px;
+    color: var(--text-color);
+    margin-right: 20px;
+    font-size: 0.7em;
+    padding: 5px 10px 5px 10px;
+}

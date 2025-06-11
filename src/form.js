@@ -13,9 +13,9 @@ function createTaskFormHandler(){
 
     
     const tagArray =[
-        createInputTextTag('title',['input-task','title','text'],true),
-        createTextAreaTag('discription',['input-task','discription','text']),
-        createInputDateTag('duedate',['input-task','due-date','date'],true),
+        createInputTextTag('Title',['input-task','title','text'],true),
+        createTextAreaTag('Discription',['input-task','discription','text']),
+        createInputDateTag('Duedate',['input-task','due-date','date'],true),
     ]
 
     
