@@ -22,7 +22,7 @@ export function mainInterface(){
     const header = dom.createTag('div','header-div') 
     const sideBar =  dom.createTag('div','sidebar-div')
     const mainContent = dom.createTag('div','main-div') 
-    const giveHeading = dom.createTag('h1','heading-todo',header,'TODO')
+    dom.createTag('h1','heading-todo',header,'TODO')
 
     
 
@@ -60,7 +60,7 @@ function displayProjectSidebar(updateCurrentProject,displayProjectInParent){
         createSidebarButton(projectsDisplayDiv,'Tommarow')
         createSidebarButton(projectsDisplayDiv,'This Week')
         createSidebarButton(projectsDisplayDiv,'Inbox')
-        const sidebarProjectHeading = dom.createTag('h2','sidebar-project-heading',projectsDisplayDiv,'Project')
+        dom.createTag('h2','sidebar-project-heading',projectsDisplayDiv,'Project')
         projects.forEach((project)=>{
             createSidebarButton(projectsDisplayDiv,project)
         })
@@ -127,7 +127,6 @@ function displayProjectSidebar(updateCurrentProject,displayProjectInParent){
 
 function displayProject(){
     let currentProject  = 'Inbox'
-    const {getArray} = sortToDatesAndGetArrays()
 
     const updateCurrentProject = (project)=>{
         currentProject = project
@@ -165,7 +164,7 @@ function displayProject(){
         parentDiv.innerHTML = ""
         const projectDiv  = dom.createTag('div','project-div');
         const projectHeader = dom.createTag('div','project-header',projectDiv)
-        const projectHeading = dom.createTag('h2','project-heading',projectHeader,currentProject);
+        dom.createTag('h2','project-heading',projectHeader,currentProject);
         if(isCustomProject) dom.makeParent(projectHeader,deleteProjectButton())
         const taskListDiv = getProjectTaskDataIntoDiv(taskList);
         dom.makeParent(projectDiv,taskListDiv)
@@ -184,8 +183,8 @@ function displayProject(){
         taskList.forEach((task)=>{
             let taskDiv = dom.createTag('div','task-div',taskListDiv);
             dom.makeParent(taskDiv,createIsCompleteInputCheckBox(task))
-            let title = dom.createTag('h3','title-task', taskDiv, task.title)
-            let dueDate = dom.createTag('h4','due-date', taskDiv,task.dueDate)
+            dom.createTag('h3','title-task', taskDiv, task.title)
+            dom.createTag('h4','due-date', taskDiv,task.dueDate)
             dom.makeParent(taskDiv,createDeleteTaskButton(taskListDiv,taskDiv,task))
             dom.makeParent(taskDiv,createEditTaskButton(task,taskDiv))
         })
