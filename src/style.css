@@ -1,217 +1,209 @@
-body{
-    --background-color-global: #0a0a0a;
-    --sidebar-color:oklch(26.9% 0 0);
-    --text-color:#f8f8f8;
-    background-color: var(--background-color-global);
-    margin: 0px;
-    color: var(--text-color);
-    
+body {
+  --background-color-global: #0a0a0a;
+  --sidebar-color: oklch(26.9% 0 0);
+  --text-color: #f8f8f8;
+  background-color: var(--background-color-global);
+  margin: 0px;
+  color: var(--text-color);
 }
 
-.container-div{
-    display: grid;
-    grid-template-columns: 20vw 80vw;
+.container-div {
+  display: grid;
+  grid-template-columns: 20vw 80vw;
 }
 
-.header-div{
-    height: 12vh;
-    background-color: #131313;
-    display: flex;
-    justify-content: start;
-    align-items: center;
-    grid-column: 1 / span 2;
-    padding-left:40px ;
+.header-div {
+  height: 12vh;
+  background-color: #131313;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  grid-column: 1 / span 2;
+  padding-left: 40px;
 }
 
-.sidebar-div{
-    background-color:var(--sidebar-color);
-    height: max(88vh,100%);
+.sidebar-div {
+  background-color: var(--sidebar-color);
+  height: max(88vh, 100%);
 }
 
-.add-project-div{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 10px;
+.add-project-div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
 }
 
 .add-project-div > button {
-    
-    background-color: var(--sidebar-color);
-    border: 0px;
+  background-color: var(--sidebar-color);
+  border: 0px;
 }
 
-.add-project-div img{
-    width: 30px;
+.add-project-div img {
+  width: 30px;
 }
 
-.add-project-div > input{
-    border: 3px solid black;
-    border-radius: 5px;
+.add-project-div > input {
+  border: 3px solid black;
+  border-radius: 5px;
 }
 
 .heading-todo {
-    color: var(--text-color);
+  color: var(--text-color);
 }
 
-
-
-
-.project-button,.project-button-custom{
-    width: 100%;
-    background-color:var(--sidebar-color) ;
-    color: var(--text-color);
-    border: 0px;
-    font-size: 1em;
-    margin-top:10px ;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    text-align: start;
-    font-weight: 600;
-    padding-left: 25px;
+.project-button,
+.project-button-custom {
+  width: 100%;
+  background-color: var(--sidebar-color);
+  color: var(--text-color);
+  border: 0px;
+  font-size: 1em;
+  margin-top: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  text-align: start;
+  font-weight: 600;
+  padding-left: 25px;
 }
 
-.sidebar-project-heading{
-    padding-left: 25px;
+.sidebar-project-heading {
+  padding-left: 25px;
 }
 
-.project-button-custom{
-    color: black;
+.project-button-custom {
+  color: black;
 }
 
-.project-button:hover{
-    background-color: aqua;
+.project-button:hover {
+  background-color: aqua;
 }
 
-
-form >div> label{
-    color: black;
+form > div > label {
+  color: black;
 }
 
-.task-div{
-    display: flex;
-    height: 40px;
-    align-items: center;
-    margin-top: 20px;
+.task-div {
+  display: flex;
+  height: 40px;
+  align-items: center;
+  margin-top: 20px;
 }
 
-.task-div >input{
-    margin-right: 20px;
+.task-div > input {
+  margin-right: 20px;
 }
 
-.task-div >h3 {
-    width:60%
+.task-div > h3 {
+  width: 60%;
 }
 
-.task-div >.due-date {
-    width: 20%;
+.task-div > .due-date {
+  width: 20%;
 }
 
-.task-div >button {
-    height: 40px;
+.task-div > button {
+  height: 40px;
 }
 
-
-.add-task-container{
-    margin-top: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.add-task-container {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.add-task-container >button{
-    background-color: var(--background-color-global);
-    border: 0px;
+.add-task-container > button {
+  background-color: var(--background-color-global);
+  border: 0px;
 }
 
-.add-task-container img{
-    width: 50px;
+.add-task-container img {
+  width: 50px;
 }
 
-
-.form-dialog{
-    width :60%
+.form-dialog {
+  width: 60%;
 }
 
-.task-form{
-    font-size: 1.5em;
+.task-form {
+  font-size: 1.5em;
 }
 
-.task-form  label{
-    display: block;
+.task-form label {
+  display: block;
 }
 
 #Title {
-    height: 30px;
+  height: 30px;
 }
 
-.task-form  .input-task {
-    width: 100%;
-    margin-bottom: 15px;
+.task-form .input-task {
+  width: 100%;
+  margin-bottom: 15px;
 }
 
-.task-form .due-date{
-    width :20%;
+.task-form .due-date {
+  width: 20%;
 }
-#Discription{
-    height: 200px;
+#Discription {
+  height: 200px;
 }
 
 .project-heading {
-    text-align: center;
-    font-size: 2.5em;
+  text-align: center;
+  font-size: 2.5em;
 }
 
-.project-header{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-left: 50px;
-    margin-right: 50px;
+.project-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-left: 50px;
+  margin-right: 50px;
 }
 
-.project-header > button{
-    background-color: var(--background-color-global);
-    border: #0a0a0a;
-    width:30px;
-    height: 30px;
+.project-header > button {
+  background-color: var(--background-color-global);
+  border: #0a0a0a;
+  width: 30px;
+  height: 30px;
 }
 
-.project-header > button>img {
-    width:30px;
+.project-header > button > img {
+  width: 30px;
 }
 
-.task-div >button{
-    background-color: var(--background-color-global);
-    border: 0px;
+.task-div > button {
+  background-color: var(--background-color-global);
+  border: 0px;
 }
 
-.task-div >button>img{
-    width: 30px;
+.task-div > button > img {
+  width: 30px;
 }
 
-.form-dialog{
-    background-color: #a3a3a3;
-    border-radius: 20px;
+.form-dialog {
+  background-color: #a3a3a3;
+  border-radius: 20px;
 }
 
-
-.task-submit-button{
-    background-color: #dc2626;
-    border: 0px;
-    border-radius: 10px;
-    color: var(--text-color);
-    margin-right: 20px;
-    font-size: 0.7em;
-    padding: 5px 10px 5px 10px;
+.task-submit-button {
+  background-color: #dc2626;
+  border: 0px;
+  border-radius: 10px;
+  color: var(--text-color);
+  margin-right: 20px;
+  font-size: 0.7em;
+  padding: 5px 10px 5px 10px;
 }
 
-.task-cancel-button{
-    background-color: #16a34a;
-    border: 0px;
-    border-radius: 10px;
-    color: var(--text-color);
-    margin-right: 20px;
-    font-size: 0.7em;
-    padding: 5px 10px 5px 10px;
+.task-cancel-button {
+  background-color: #16a34a;
+  border: 0px;
+  border-radius: 10px;
+  color: var(--text-color);
+  margin-right: 20px;
+  font-size: 0.7em;
+  padding: 5px 10px 5px 10px;
 }

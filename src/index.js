@@ -1,11 +1,5 @@
+import { display } from "./display-dynamics";
 
-import { display } from "./display-dynamics"
+const k = display();
 
-
-
-const k = display()
-
-k.initialLoad()
-
-
-
+k.initialLoad();
