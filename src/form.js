@@ -19,8 +19,6 @@ function createTaskFormHandler() {
   };
 
   const setFormValue = (...data) => {
-    console.log(title, discription, duedate, data);
-    const arg = Array.from(arguments);
     tagArray.forEach((tag, i) => {
       console.log(tag.inputTag);
       tag.inputTag.value = data[i];

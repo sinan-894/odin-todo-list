@@ -220,11 +220,11 @@ function displayProject() {
       if (inputCheckBox.checked) {
         console.log("Checkbox is checked");
         task.isTaskComplete = true;
-        manageLocalStorage.updateLocalStorage(currentProject)
+        manageLocalStorage.updateLocalStorage(manageProjectList.findProjectOftheTask(task))
       } else {
         console.log("Checkbox is unchecked");
         task.isTaskComplete = false;
-        manageLocalStorage.updateLocalStorage(currentProject)
+        manageLocalStorage.updateLocalStorage(manageProjectList.findProjectOftheTask(task))
       }
 
       console.log(projectList);
